@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface HeaderProps {
-  openDrawer: () => void;
+  drawer: typeof useRef;
 }
 
-export function Header({ openDrawer }: HeaderProps) {
+export function Header({ drawer }: HeaderProps) {
   return (
     <View style={styles.container}>
-      <Feather name="menu" size={32} style={styles.icon} />
+      <TouchableOpacity onPress={() => drawer.current?.openDrawer()}>
+        <Feather name="menu" size={32} style={styles.icon} />
+      </TouchableOpacity>
     </View>
   );
 }
