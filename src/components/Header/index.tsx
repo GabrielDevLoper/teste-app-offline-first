@@ -1,10 +1,12 @@
 import React, { useRef } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, DrawerLayoutAndroid } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface HeaderProps {
-  drawer: typeof useRef;
+  drawer: {
+    current: DrawerLayoutAndroid;
+  };
 }
 
 export function Header({ drawer }: HeaderProps) {

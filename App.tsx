@@ -5,6 +5,7 @@ import { Ubuntu_700Bold, useFonts } from "@expo-google-fonts/ubuntu";
 import { Home } from "./src/pages/Home";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
+import { Routes } from "./src/routes";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -15,14 +16,12 @@ export default function App() {
 
   return (
     <>
-      <NavigationContainer>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="transparent"
-          translucent
-        />
-        <Home />
-      </NavigationContainer>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="transparent"
+        translucent
+      />
+      <Routes />
     </>
   );
 }

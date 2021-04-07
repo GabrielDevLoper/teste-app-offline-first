@@ -11,12 +11,17 @@ import {
 import { TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInputMask } from "react-native-masked-text";
+import { useNavigation } from "@react-navigation/native";
 
 interface DrawerProps {
-  drawer: typeof useRef;
+  drawer: {
+    current: DrawerLayoutAndroid;
+  };
 }
 
 export const Drawer = ({ drawer }: DrawerProps) => {
+  const navigation = useNavigation();
+
   const [nome, setNome] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
@@ -24,12 +29,31 @@ export const Drawer = ({ drawer }: DrawerProps) => {
 
   function ContentDrawer() {
     return (
-      <View style={[styles.container, styles.navigationContainer]}>
-        <Text style={styles.paragraph}>I'm in the Drawer!</Text>
-        <Button
-          title="Close drawer"
-          onPress={() => drawer.current?.closeDrawer()}
-        />
+      <View style={[styles.navigationContainer]}>
+        <View style={styles.itemDrawer}>
+          <Button
+            title="Close drawer"
+            onPress={() => navigation.navigate("SignIn")}
+          />
+        </View>
+        <View style={styles.itemDrawer}>
+          <Button
+            title="Close drawer"
+            onPress={() => drawer.current?.closeDrawer()}
+          />
+        </View>
+        <View style={styles.itemDrawer}>
+          <Button
+            title="Close drawer"
+            onPress={() => drawer.current?.closeDrawer()}
+          />
+        </View>
+        <View style={styles.itemDrawer}>
+          <Button
+            title="Close drawer"
+            onPress={() => drawer.current?.closeDrawer()}
+          />
+        </View>
       </View>
     );
   }
@@ -118,7 +142,7 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     width: 300,
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#e5ebec",
     borderRadius: 10,
     marginBottom: 8,
     paddingHorizontal: 24,
@@ -132,7 +156,11 @@ const styles = StyleSheet.create({
 
   title: {
     margin: 20,
-    fontFamily: "Roboto_400Regular",
     fontSize: 20,
+  },
+
+  itemDrawer: {
+    margin: 10,
+    backgroundColor: "#ecf0f1",
   },
 });
