@@ -19,6 +19,18 @@ import { Toast } from "native-base";
 import { api } from "../../../services/api";
 import LottieView from "lottie-react-native";
 
+interface DataProps {
+  data: {
+    cpf: string;
+    nome: string;
+    created_at: Date;
+    updated_at: Date;
+    id: number;
+    id_setor: number;
+    data_nascimento: Date;
+  };
+}
+
 export function CadastroFuncionario() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
@@ -29,7 +41,7 @@ export function CadastroFuncionario() {
   const [setor, setSetor] = useState("");
 
   async function handleSalvar() {
-    const data = {
+    const datas = {
       nome,
       data_nascimento,
       cpf,
@@ -41,7 +53,9 @@ export function CadastroFuncionario() {
     try {
       setLoading(true);
 
-      await api.post("/api/usuarios", data);
+      const {
+        data: { data: user },
+      } = await api.post<DataProps>("/api/usuarios", datas);
 
       setLoading(false);
 
