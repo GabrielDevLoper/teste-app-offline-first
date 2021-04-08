@@ -19,7 +19,7 @@ export const Dashboard = ({ children }: DashboardProps) => {
 
   return (
     <>
-      <Header />
+      <Header title="Dashboard" />
       <View style={styles.container}>{children}</View>
     </>
   );
