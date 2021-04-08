@@ -1,27 +1,11 @@
-import React, { useRef } from "react";
-import { DrawerLayoutAndroid } from "react-native";
-import { Drawer } from "../../components/Drawer";
-import { Header } from "../../components/Header";
-
-interface DrawerProps {
-  drawer: {
-    current: DrawerLayoutAndroid;
-  };
-}
+import React from "react";
+import { Text } from "react-native";
+import { Dashboard } from "../../components/Dashboard";
 
 export function Home() {
-  const drawer = useRef<DrawerProps>(null);
   return (
-    <>
-      <Header
-        // @ts-expect-error
-        drawer={drawer}
-      />
-
-      <Drawer
-        // @ts-expect-error
-        drawer={drawer}
-      />
-    </>
+    <Dashboard>
+      <Text>Homeee</Text>
+    </Dashboard>
   );
 }

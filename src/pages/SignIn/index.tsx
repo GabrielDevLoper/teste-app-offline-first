@@ -1,6 +1,14 @@
 import React, { useState } from "react";
-import { Alert, Button, StyleSheet, TextInput, View } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 
 export function SignIn() {
   const navigation = useNavigation();
@@ -8,22 +16,45 @@ export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  function handleGoToDashboard() {
+    navigation.navigate("Home");
+  }
+
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        onChangeText={setEmail}
-        value={email}
-        placeholder="Email"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={setPassword}
-        value={password}
-        placeholder="Senha"
-      />
-      <View style={styles.entrar}>
-        <Button title="Entrar" onPress={() => navigation.navigate("Home")} />
+      <View style={styles.inputArea}>
+        <Feather name="user" size={32} style={styles.icon} />
+        <TextInput
+          inlineImageLeft="search"
+          style={styles.inputStyle}
+          onChangeText={setEmail}
+          value={email}
+          placeholder="Email"
+          placeholderTextColor="#9495a3"
+        />
+      </View>
+      <View style={styles.inputArea}>
+        <Feather name="key" size={32} style={styles.icon} />
+
+        <TextInput
+          autoCompleteType="password"
+          style={styles.inputStyle}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="Senha"
+          placeholderTextColor="#9495a3"
+        />
+      </View>
+      <View style={styles.containerButton}>
+        <TouchableOpacity
+          style={styles.buttonEntrar}
+          onPress={handleGoToDashboard}
+        >
+          <Text style={styles.textButtonEntrar}>Entrar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonSair} onPress={() => {}}>
+          <Text style={styles.textButtonEntrar}>Sair</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -36,18 +67,53 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 16,
   },
-  entrar: {
+  containerButton: {
+    width: 350,
+    flexDirection: "row",
     marginTop: 50,
-    width: 300,
-    height: 100,
   },
-  input: {
-    height: 50,
-    width: 300,
-    backgroundColor: "#e5ebec",
+  buttonEntrar: {
+    flex: 1,
+    padding: 15,
+    margin: 10,
+    backgroundColor: "#2196F3",
+    alignItems: "center",
     borderRadius: 10,
-    marginBottom: 8,
-    paddingHorizontal: 24,
-    fontSize: 16,
+  },
+
+  buttonSair: {
+    flex: 1,
+    padding: 15,
+    margin: 10,
+    backgroundColor: "#f5423c",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  inputArea: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderColor: "#e5ebec",
+    paddingBottom: 10,
+    borderRadius: 10,
+    padding: 10,
+    margin: 5,
+    backgroundColor: "#e5ebec",
+  },
+  inputStyle: {
+    flex: 1,
+    borderRadius: 10,
+    fontFamily: "Roboto_500Medium",
+    fontSize: 20,
+    color: "#5c5e70",
+  },
+  icon: {
+    padding: 10,
+    color: "#9495a3",
+  },
+
+  textButtonEntrar: {
+    color: "white",
+    fontSize: 20,
+    fontFamily: "Roboto_500Medium",
   },
 });
