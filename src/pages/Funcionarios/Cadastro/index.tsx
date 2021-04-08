@@ -8,6 +8,7 @@ import {
   Alert,
   TouchableOpacity,
   ActivityIndicator,
+  Modal,
 } from "react-native";
 import { TextInput, TouchableHighlight } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Dashboard } from "../../../components/Dashboard";
 import { Toast } from "native-base";
 import { api } from "../../../services/api";
+import LottieView from "lottie-react-native";
 
 export function CadastroFuncionario() {
   const navigation = useNavigation();
@@ -76,7 +78,17 @@ export function CadastroFuncionario() {
   return (
     <Dashboard>
       {loading ? (
-        <ActivityIndicator size={200} color="#2196F3" />
+        <>
+          <ActivityIndicator size={150} color="#2196F3" />
+
+          {/*
+          <LottieView
+            source={require("../../../assets/loader-circles.json")}
+            loop
+            autoPlay
+          />
+          */}
+        </>
       ) : (
         <>
           <Text style={styles.title}>Cadastro de funcionário</Text>
