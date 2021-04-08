@@ -18,11 +18,11 @@ interface DataProps {
   data: {
     cpf: string;
     nome: string;
-    created_at: Date;
-    updated_at: Date;
-    id: number;
+    created_at: number;
+    updated_at: number;
+    id?: number;
     setor: number;
-    data_nascimento: Date;
+    data_nascimento: string;
   };
 }
 
@@ -40,12 +40,14 @@ export function CadastroFuncionario() {
   console.log(NetInfo.useNetInfo().isConnected);
   async function handleSalvar() {
     const datas = {
-      nome,
-      data_nascimento,
-      cpf,
-      setor: Number(setor),
-      created_at: Date,
-      updated_at: Date,
+      data: {
+        nome,
+        data_nascimento,
+        cpf,
+        setor: Number(setor),
+        created_at: Date.now(),
+        updated_at: Date.now(),
+      },
     };
 
     //const response = await api.get("/api/usuarios");
@@ -55,8 +57,16 @@ export function CadastroFuncionario() {
 
       const {
         data: { data: user },
-      } = await api.post<DataProps>("/api/usuarios", datas);
-      await AsyncStorage.setItem("@storage_Key", JSON.stringify(datas));
+      } = await api.post<DataProps>("/api/usuarios", datas.data);
+      const updateFuncionariosOffline = [...funcionariosOffline];
+
+      updateFuncionariosOffline.push(datas);
+      await AsyncStorage.setItem(
+        "@storage_Key",
+        JSON.stringify(updateFuncionariosOffline)
+      );
+
+      setFuncionariosOffline(updateFuncionariosOffline);
 
       setLoading(false);
 
