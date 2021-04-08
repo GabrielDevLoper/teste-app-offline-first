@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import {
-  Button,
   Text,
   StyleSheet,
-  View,
-  Image,
-  Alert,
   TouchableOpacity,
   ActivityIndicator,
-  Modal,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,7 +11,8 @@ import { TextInputMask } from "react-native-masked-text";
 import { Dashboard } from "../../../components/Dashboard";
 import { Toast } from "native-base";
 import { api } from "../../../services/api";
-import LottieView from "lottie-react-native";
+import NetInfo from "@react-native-community/netinfo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface DataProps {
   data: {
@@ -25,35 +21,42 @@ interface DataProps {
     created_at: Date;
     updated_at: Date;
     id: number;
-    id_setor: number;
+    setor: number;
     data_nascimento: Date;
   };
 }
 
 export function CadastroFuncionario() {
   const [loading, setLoading] = useState(false);
+  const [funcionariosOffline, setFuncionariosOffline] = useState<DataProps[]>(
+    []
+  );
 
   const [nome, setNome] = useState("");
   const [data_nascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
   const [setor, setSetor] = useState("");
 
+  console.log(NetInfo.useNetInfo().isConnected);
   async function handleSalvar() {
     const datas = {
       nome,
       data_nascimento,
       cpf,
       setor: Number(setor),
+      created_at: Date,
+      updated_at: Date,
     };
 
     //const response = await api.get("/api/usuarios");
-
+    console.log(await AsyncStorage.getItem("@storage_Key"));
     try {
       setLoading(true);
 
       const {
         data: { data: user },
       } = await api.post<DataProps>("/api/usuarios", datas);
+      await AsyncStorage.setItem("@storage_Key", JSON.stringify(datas));
 
       setLoading(false);
 
