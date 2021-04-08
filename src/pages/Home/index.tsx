@@ -1,11 +1,14 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, Image, View } from "react-native";
 import { Dashboard } from "../../components/Dashboard";
+import LottieView from "lottie-react-native";
 
 export function Home() {
   return (
     <Dashboard>
-      <Text>Homeee</Text>
+      <View>
+        <Image source={require("../../assets/sms.png")} />
+      </View>
     </Dashboard>
   );
 }

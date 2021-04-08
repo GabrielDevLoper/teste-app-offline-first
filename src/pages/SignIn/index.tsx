@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
@@ -21,42 +22,48 @@ export function SignIn() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputArea}>
-        <Feather name="user" size={32} style={styles.icon} />
-        <TextInput
-          inlineImageLeft="search"
-          style={styles.inputStyle}
-          onChangeText={setEmail}
-          value={email}
-          placeholder="Email"
-          placeholderTextColor="#9495a3"
-        />
+    <>
+      <View style={styles.containerLogo}>
+        <Image source={require("../../assets/sms.png")} />
       </View>
-      <View style={styles.inputArea}>
-        <Feather name="key" size={32} style={styles.icon} />
 
-        <TextInput
-          autoCompleteType="password"
-          style={styles.inputStyle}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Senha"
-          placeholderTextColor="#9495a3"
-        />
+      <View style={styles.container}>
+        <View style={styles.inputArea}>
+          <Feather name="user" size={32} style={styles.icon} />
+          <TextInput
+            inlineImageLeft="search"
+            style={styles.inputStyle}
+            onChangeText={setEmail}
+            value={email}
+            placeholder="Email"
+            placeholderTextColor="#9495a3"
+          />
+        </View>
+        <View style={styles.inputArea}>
+          <Feather name="key" size={32} style={styles.icon} />
+
+          <TextInput
+            autoCompleteType="password"
+            style={styles.inputStyle}
+            onChangeText={setPassword}
+            value={password}
+            placeholder="Senha"
+            placeholderTextColor="#9495a3"
+          />
+        </View>
+        <View style={styles.containerButton}>
+          <TouchableOpacity
+            style={styles.buttonEntrar}
+            onPress={handleGoToDashboard}
+          >
+            <Text style={styles.textButtonEntrar}>Entrar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonSair} onPress={() => {}}>
+            <Text style={styles.textButtonEntrar}>Sair</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.containerButton}>
-        <TouchableOpacity
-          style={styles.buttonEntrar}
-          onPress={handleGoToDashboard}
-        >
-          <Text style={styles.textButtonEntrar}>Entrar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonSair} onPress={() => {}}>
-          <Text style={styles.textButtonEntrar}>Sair</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </>
   );
 }
 
@@ -67,10 +74,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 16,
   },
+
+  containerLogo: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 50,
+  },
+
   containerButton: {
     width: 350,
     flexDirection: "row",
-    marginTop: 50,
+    marginTop: 20,
   },
   buttonEntrar: {
     flex: 1,
@@ -102,7 +117,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     flex: 1,
     borderRadius: 10,
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_medium",
     fontSize: 20,
     color: "#5c5e70",
   },
@@ -114,6 +129,6 @@ const styles = StyleSheet.create({
   textButtonEntrar: {
     color: "white",
     fontSize: 20,
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_medium",
   },
 });

@@ -10,10 +10,9 @@ import {
   ActivityIndicator,
   Modal,
 } from "react-native";
-import { TextInput, TouchableHighlight } from "react-native-gesture-handler";
+import { TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInputMask } from "react-native-masked-text";
-import { useNavigation } from "@react-navigation/native";
 import { Dashboard } from "../../../components/Dashboard";
 import { Toast } from "native-base";
 import { api } from "../../../services/api";
@@ -32,7 +31,6 @@ interface DataProps {
 }
 
 export function CadastroFuncionario() {
-  const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
 
   const [nome, setNome] = useState("");

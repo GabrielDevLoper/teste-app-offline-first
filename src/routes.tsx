@@ -1,40 +1,7 @@
-/*import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { SignIn } from "./pages/SignIn";
-import { Home } from "./pages/Home";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Funcionarios } from "./pages/Funcionarios";
-import { CadastroFuncionario } from "./pages/Funcionarios/Cadastro";
-
-const AppStack = createStackNavigator();
-
-const Routes = () => {
-  return (
-    <NavigationContainer>
-      <AppStack.Navigator
-        headerMode="none"
-        screenOptions={{ cardStyle: { backgroundColor: "#f0f0f5" } }}
-        initialRouteName="CadastrarFuncionario"
-      >
-        <AppStack.Screen name="Home" component={Home} />
-        <AppStack.Screen name="SignIn" component={SignIn} />
-        <AppStack.Screen name="Funcionarios" component={Funcionarios} />
-        <AppStack.Screen
-          name="CadastrarFuncionario"
-          component={CadastroFuncionario}
-        />
-      </AppStack.Navigator>
-    </NavigationContainer>
-  );
-};
-
-export { Routes };
-*/
-
 import * as React from "react";
 import { Root } from "native-base";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { SignIn } from "./pages/SignIn";
 import { Home } from "./pages/Home";
 import { Funcionarios } from "./pages/Funcionarios";
