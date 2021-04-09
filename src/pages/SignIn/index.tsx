@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
@@ -22,15 +23,17 @@ export function SignIn() {
 
   return (
     <>
-      <View style={styles.containerLogo}>
-        <Image source={require("../../assets/sms.png")} />
-      </View>
-
-      <View style={styles.containerTitle}>
-        <Text style={styles.title}>Acesso ao sistema</Text>
-      </View>
-
       <View style={styles.container}>
+        <View style={styles.containerLogo}>
+          <Image
+            style={styles.img}
+            source={require("../../assets/sms.png")}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={styles.containerTitle}>
+          <Text style={styles.title}>Acesso ao sistema</Text>
+        </View>
         <View style={styles.inputArea}>
           <Feather name="user" size={32} style={styles.icon} />
           <TextInput
@@ -61,8 +64,12 @@ export function SignIn() {
           >
             <Text style={styles.textButtonEntrar}>Entrar</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonSair} onPress={() => {}}>
-            <Text style={styles.textButtonEntrar}>Sair</Text>
+        </View>
+        <View style={styles.containerButton}>
+          <TouchableOpacity style={styles.buttonCadastrar} onPress={() => {}}>
+            <Text style={styles.textButtonCadastrar}>
+              Clique aqui e cadastre-se !
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -76,16 +83,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-  containerLogo: {
+  containerMain: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 50,
+    backgroundColor: "#1d192c",
+  },
+  containerLogo: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   containerButton: {
     width: 350,
+    alignItems: "center",
     flexDirection: "row",
     marginTop: 20,
   },
@@ -98,11 +109,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  buttonSair: {
+  buttonCadastrar: {
     flex: 1,
-    padding: 15,
+    paddingTop: 30,
     margin: 10,
-    backgroundColor: "#f5423c",
     alignItems: "center",
     borderRadius: 10,
   },
@@ -117,7 +127,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#e5ebec",
   },
   inputStyle: {
-    flex: 1,
+    width: 250,
     borderRadius: 10,
     fontFamily: "Roboto_500Medium",
     fontSize: 20,
@@ -134,14 +144,24 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto_500Medium",
   },
 
+  textButtonCadastrar: {
+    color: "black",
+    fontSize: 20,
+    fontFamily: "Roboto_500Medium",
+  },
+
   containerTitle: {
-    flex: 0.001,
     alignItems: "center",
     justifyContent: "center",
+    padding: 30,
   },
 
   title: {
     fontSize: 20,
     fontFamily: "Roboto_500Medium",
+  },
+
+  img: {
+    width: 150,
   },
 });

@@ -19,13 +19,14 @@ interface DataProps {
   id?: number;
   nome: string;
   cpf: string;
-  setor: number;
+  id_setor: number;
   data_nascimento: string;
   created_at: Date;
   updated_at: Date;
 }
 
 interface Setores {
+  id?: number;
   nome: string;
   created_at: Date;
   updated_at: Date;
@@ -48,15 +49,13 @@ export function CadastroFuncionario() {
   useEffect(() => {
     async function loadSetores() {
       const { data } = await api.get("/api/setores");
-
-      setSetor(data);
+      setSetores(data);
     }
 
     async function loadFuncionariosOnline() {
       setLoading(true);
       const { data } = await api.get("/api/usuarios");
 
-      console.log(data);
       setFuncionariosOnline(data);
 
       setLoading(false);
@@ -87,12 +86,14 @@ export function CadastroFuncionario() {
     return funcExiste;
   });
 
+  console.log(matchFuncionarios);
+
   async function handleSalvar() {
     const datas = {
       nome,
       data_nascimento,
       cpf,
-      setor: Number(setor),
+      id_setor: Number(setor),
     };
 
     //const response = await api.get("/api/usuarios");
@@ -131,10 +132,22 @@ export function CadastroFuncionario() {
         setFuncionariosOffline(updateFuncionariosOffline);
 
         setLoading(false);
-      } else {
-        const { data } = await api.post<DataProps>("/api/usuarios", datas);
-        setLoading(false);
+
+        Alert.alert("", "Sucesso ao cadastrar funcionário ✅", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+
+        setNome("");
+        setCpf("");
+        setDataNascimento("");
+        setSetor("");
+
+        return;
       }
+
+      const { data } = await api.post<DataProps>("/api/usuarios", datas);
+      console.log(data);
+      setLoading(false);
 
       Alert.alert("", "Sucesso ao cadastrar funcionário ✅", [
         { text: "OK", onPress: () => console.log("OK Pressed") },
