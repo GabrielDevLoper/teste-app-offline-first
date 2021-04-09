@@ -1,29 +1,28 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import NetInfo from "@react-native-community/netinfo";
 import React, { useState } from "react";
 import {
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInputMask } from "react-native-masked-text";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Dashboard } from "../../../components/Dashboard";
-import { Toast } from "native-base";
 import { api } from "../../../services/api";
-import NetInfo from "@react-native-community/netinfo";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface DataProps {
-  data: {
-    cpf: string;
-    nome: string;
-    created_at: number;
-    updated_at: number;
-    id?: number;
-    setor: number;
-    data_nascimento: string;
-  };
+  cpf: string;
+  nome: string;
+  created_at: number;
+  updated_at: number;
+  id?: number;
+  setor: number;
+  data_nascimento: string;
 }
 
 export function CadastroFuncionario() {
@@ -38,48 +37,58 @@ export function CadastroFuncionario() {
   const [setor, setSetor] = useState("");
 
   console.log(NetInfo.useNetInfo().isConnected);
+
+  const net = false;
+
   async function handleSalvar() {
     const datas = {
-      data: {
-        nome,
-        data_nascimento,
-        cpf,
-        setor: Number(setor),
-        created_at: Date.now(),
-        updated_at: Date.now(),
-      },
+      nome,
+      data_nascimento,
+      cpf,
+      setor: Number(setor),
+      created_at: Date.now(),
+      updated_at: Date.now(),
     };
 
     //const response = await api.get("/api/usuarios");
-    console.log(await AsyncStorage.getItem("@storage_Key"));
     try {
       setLoading(true);
 
-      const {
-        data: { data: user },
-      } = await api.post<DataProps>("/api/usuarios", datas.data);
-      const updateFuncionariosOffline = [...funcionariosOffline];
+      if (!net) {
+        if (
+          nome.length === 0 ||
+          data_nascimento.length === 0 ||
+          setor.length === 0
+        ) {
+          console.log(funcionariosOffline);
+          Alert.alert("", "Erro ao cadastrar funcionário   ❌", [
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]);
 
-      updateFuncionariosOffline.push(datas);
-      await AsyncStorage.setItem(
-        "@storage_Key",
-        JSON.stringify(updateFuncionariosOffline)
-      );
+          setLoading(false);
 
-      setFuncionariosOffline(updateFuncionariosOffline);
+          return;
+        }
 
-      setLoading(false);
+        const updateFuncionariosOffline = [...funcionariosOffline];
 
-      Toast.show({
-        text: "Funcionario cadastrado com sucesso",
-        buttonText: "ok",
-        position: "top",
-        duration: 3000,
-        style: {
-          marginTop: 59,
-          backgroundColor: "#2abb06",
-        },
-      });
+        updateFuncionariosOffline.push(datas);
+        await AsyncStorage.setItem(
+          "@storage_Key",
+          JSON.stringify(updateFuncionariosOffline)
+        );
+
+        setFuncionariosOffline(updateFuncionariosOffline);
+
+        setLoading(false);
+      } else {
+        const { data } = await api.post<DataProps>("/api/usuarios", datas);
+        setLoading(false);
+      }
+
+      Alert.alert("", "Sucesso ao cadastrar funcionário ✅", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
 
       setNome("");
       setCpf("");
@@ -87,33 +96,17 @@ export function CadastroFuncionario() {
       setSetor("");
     } catch {
       setLoading(false);
-      Toast.show({
-        text: "Erro ao cadastrar um funcionario",
-        buttonText: "ok",
-        position: "top",
-        duration: 3000,
-        style: {
-          marginTop: 59,
-          backgroundColor: "#eb2b2b",
-        },
-      });
+
+      Alert.alert("", "Erro ao cadastrar funcionário   ❌", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
     }
   }
 
   return (
     <Dashboard>
       {loading ? (
-        <>
-          <ActivityIndicator size={150} color="#2196F3" />
-
-          {/*
-          <LottieView
-            source={require("../../../assets/loader-circles.json")}
-            loop
-            autoPlay
-          />
-          */}
-        </>
+        <ActivityIndicator size={150} color="#2196F3" />
       ) : (
         <>
           <Text style={styles.title}>Cadastro de funcionário</Text>

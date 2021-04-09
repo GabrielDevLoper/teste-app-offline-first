@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Button,
   StyleSheet,
   Text,
   TextInput,
@@ -117,7 +116,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     flex: 1,
     borderRadius: 10,
-    fontFamily: "Roboto_medium",
+    fontFamily: "Roboto_500Medium",
     fontSize: 20,
     color: "#5c5e70",
   },
@@ -129,6 +128,6 @@ const styles = StyleSheet.create({
   textButtonEntrar: {
     color: "white",
     fontSize: 20,
-    fontFamily: "Roboto_medium",
+    fontFamily: "Roboto_500Medium",
   },
 });
