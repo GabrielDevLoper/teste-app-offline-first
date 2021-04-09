@@ -65,9 +65,9 @@ export function CadastroFuncionario() {
     loadFuncionariosOnline();
   }, []);
 
-  //console.log(NetInfo.useNetInfo().isConnected);
-  //console.log(funcionariosOnline);
-  //console.log(funcionariosOffline);
+  // console.log(NetInfo.useNetInfo().isConnected);
+  // console.log({ online: funcionariosOnline });
+  // console.log({ offline: funcionariosOffline });
 
   const net = false;
 
@@ -85,8 +85,6 @@ export function CadastroFuncionario() {
 
     return funcExiste;
   });
-
-  console.log(matchFuncionarios);
 
   async function handleSalvar() {
     const datas = {
