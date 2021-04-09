@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -16,13 +16,19 @@ import { Dashboard } from "../../../components/Dashboard";
 import { api } from "../../../services/api";
 
 interface DataProps {
+  id?: number;
+  nome: string;
   cpf: string;
+  setor: number;
+  data_nascimento: string;
+  created_at: number;
+  updated_at: number;
+}
+
+interface Setores {
   nome: string;
   created_at: number;
   updated_at: number;
-  id?: number;
-  setor: number;
-  data_nascimento: string;
 }
 
 export function CadastroFuncionario() {
@@ -30,15 +36,53 @@ export function CadastroFuncionario() {
   const [funcionariosOffline, setFuncionariosOffline] = useState<DataProps[]>(
     []
   );
+  const [setores, setSetores] = useState<Setores[]>([]);
+
+  const [funcionariosOnline, setFuncionariosOnline] = useState<DataProps[]>([]);
 
   const [nome, setNome] = useState("");
   const [data_nascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
   const [setor, setSetor] = useState("");
 
-  console.log(NetInfo.useNetInfo().isConnected);
+  useEffect(() => {
+    async function loadSetores() {
+      const response = await api.get("/api/setores");
+      console.log(response);
+      //setSetores(data);
+    }
+
+    async function loadFuncionariosOnline() {
+      //setLoading(true);
+      const { data } = await api.get("/api/usuarios");
+      console.log(data);
+      if (data === null) {
+        setFuncionariosOnline([]);
+        console.log("ok");
+      } else {
+        setFuncionariosOnline(data);
+      }
+
+      setLoading(false);
+    }
+
+    loadFuncionariosOnline();
+    loadSetores();
+  }, []);
+
+  //console.log(NetInfo.useNetInfo().isConnected);
+  //console.log(funcionariosOnline);
+  //console.log(funcionariosOffline);
 
   const net = false;
+
+  const getCpf = funcionariosOffline.map((func) => {
+    return func.cpf;
+  });
+
+  //console.log(getCpf);
+
+  //const mathFuncionarios = funcionariosOnline.includes({cpf:getCpf})
 
   async function handleSalvar() {
     const datas = {
