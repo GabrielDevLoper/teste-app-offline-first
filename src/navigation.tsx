@@ -70,7 +70,7 @@ function FuncionarioDrawer() {
   );
 }
 
-export function Routes() {
+export function NavigationDrawer() {
   return (
     <NavigationContainer>
       <Drawer.Navigator

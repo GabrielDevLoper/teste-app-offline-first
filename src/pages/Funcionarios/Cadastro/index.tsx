@@ -55,7 +55,6 @@ export function CadastroFuncionario() {
     async function loadFuncionariosOnline() {
       setLoading(true);
       const { data } = await api.get("/api/usuarios");
-
       setFuncionariosOnline(data);
 
       setLoading(false);
@@ -67,9 +66,8 @@ export function CadastroFuncionario() {
 
   // console.log(NetInfo.useNetInfo().isConnected);
   // console.log({ online: funcionariosOnline });
-  // console.log({ offline: funcionariosOffline });
 
-  const net = false;
+  const net = true;
 
   // recebendo todos os cpf dos usuarios que estão inseridos na api;
   const getCpf = funcionariosOnline.map((func) => {
@@ -78,15 +76,43 @@ export function CadastroFuncionario() {
 
   // verificando se ja existe usuarios na api, antes de sincronizar.
   const matchFuncionarios = funcionariosOffline.map((func) => {
-    const funcExiste = [];
-    if (getCpf.includes(func.cpf)) {
-      funcExiste.push(func);
+    if (!getCpf.includes(func.cpf)) {
+      return func;
     }
-
-    return funcExiste;
   });
 
+  // função elimina todos os objetos undefined e retorna somente
+  // os funcionarios que não existe, evitando erro e duplicação
+  const removeFuncUndefined = matchFuncionarios.filter((func) => {
+    return func != null;
+  });
+
+  async function sycronizeFuncionarios() {
+    if (removeFuncUndefined) {
+      try {
+        setLoading(true);
+        removeFuncUndefined.map(async (func) => {
+          const { data } = await api.post<DataProps>("/api/usuarios", func);
+          console.log(data);
+        });
+        setFuncionariosOffline([]);
+        Alert.alert("", "Sincronização realizada com sucesso ✅", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+        setLoading(false);
+      } catch {
+        setLoading(false);
+
+        Alert.alert("", "Erro na sincronização", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      }
+    }
+  }
+
   async function handleSalvar() {
+    // console.log(removeFuncUndefined);
+    console.log(funcionariosOffline);
     const datas = {
       nome,
       data_nascimento,
@@ -210,6 +236,14 @@ export function CadastroFuncionario() {
             >
               <Text style={styles.titleButtonText}>Cadastrar funcionário</Text>
             </TouchableOpacity>
+            {net && funcionariosOffline.length != 0 && (
+              <TouchableOpacity
+                onPress={sycronizeFuncionarios}
+                style={styles.buttonSalvar}
+              >
+                <Text style={styles.titleButtonText}>Sincronizar dados</Text>
+              </TouchableOpacity>
+            )}
           </SafeAreaView>
         </>
       )}
