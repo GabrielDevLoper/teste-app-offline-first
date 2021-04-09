@@ -26,6 +26,10 @@ export function SignIn() {
         <Image source={require("../../assets/sms.png")} />
       </View>
 
+      <View style={styles.containerTitle}>
+        <Text style={styles.title}>Acesso ao sistema</Text>
+      </View>
+
       <View style={styles.container}>
         <View style={styles.inputArea}>
           <Feather name="user" size={32} style={styles.icon} />
@@ -71,7 +75,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 16,
   },
 
   containerLogo: {
@@ -127,6 +130,17 @@ const styles = StyleSheet.create({
 
   textButtonEntrar: {
     color: "white",
+    fontSize: 20,
+    fontFamily: "Roboto_500Medium",
+  },
+
+  containerTitle: {
+    flex: 0.001,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  title: {
     fontSize: 20,
     fontFamily: "Roboto_500Medium",
   },

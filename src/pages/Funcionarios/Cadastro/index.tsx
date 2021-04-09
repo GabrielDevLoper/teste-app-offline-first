@@ -21,14 +21,14 @@ interface DataProps {
   cpf: string;
   setor: number;
   data_nascimento: string;
-  created_at: number;
-  updated_at: number;
+  created_at: Date;
+  updated_at: Date;
 }
 
 interface Setores {
   nome: string;
-  created_at: number;
-  updated_at: number;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export function CadastroFuncionario() {
@@ -47,27 +47,23 @@ export function CadastroFuncionario() {
 
   useEffect(() => {
     async function loadSetores() {
-      const response = await api.get("/api/setores");
-      console.log(response);
-      //setSetores(data);
+      const { data } = await api.get("/api/setores");
+
+      setSetor(data);
     }
 
     async function loadFuncionariosOnline() {
-      //setLoading(true);
+      setLoading(true);
       const { data } = await api.get("/api/usuarios");
+
       console.log(data);
-      if (data === null) {
-        setFuncionariosOnline([]);
-        console.log("ok");
-      } else {
-        setFuncionariosOnline(data);
-      }
+      setFuncionariosOnline(data);
 
       setLoading(false);
     }
 
-    loadFuncionariosOnline();
     loadSetores();
+    loadFuncionariosOnline();
   }, []);
 
   //console.log(NetInfo.useNetInfo().isConnected);
@@ -76,13 +72,20 @@ export function CadastroFuncionario() {
 
   const net = false;
 
-  const getCpf = funcionariosOffline.map((func) => {
+  // recebendo todos os cpf dos usuarios que estão inseridos na api;
+  const getCpf = funcionariosOnline.map((func) => {
     return func.cpf;
   });
 
-  //console.log(getCpf);
+  // verificando se ja existe usuarios na api, antes de sincronizar.
+  const matchFuncionarios = funcionariosOffline.map((func) => {
+    const funcExiste = [];
+    if (getCpf.includes(func.cpf)) {
+      funcExiste.push(func);
+    }
 
-  //const mathFuncionarios = funcionariosOnline.includes({cpf:getCpf})
+    return funcExiste;
+  });
 
   async function handleSalvar() {
     const datas = {
@@ -90,8 +93,6 @@ export function CadastroFuncionario() {
       data_nascimento,
       cpf,
       setor: Number(setor),
-      created_at: Date.now(),
-      updated_at: Date.now(),
     };
 
     //const response = await api.get("/api/usuarios");
@@ -104,7 +105,6 @@ export function CadastroFuncionario() {
           data_nascimento.length === 0 ||
           setor.length === 0
         ) {
-          console.log(funcionariosOffline);
           Alert.alert("", "Erro ao cadastrar funcionário   ❌", [
             { text: "OK", onPress: () => console.log("OK Pressed") },
           ]);
@@ -114,9 +114,15 @@ export function CadastroFuncionario() {
           return;
         }
 
+        const dataOffline = {
+          ...datas,
+          created_at: new Date(),
+          updated_at: new Date(),
+        };
+
         const updateFuncionariosOffline = [...funcionariosOffline];
 
-        updateFuncionariosOffline.push(datas);
+        updateFuncionariosOffline.push(dataOffline);
         await AsyncStorage.setItem(
           "@storage_Key",
           JSON.stringify(updateFuncionariosOffline)
