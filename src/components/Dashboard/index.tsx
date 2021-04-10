@@ -32,6 +32,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 16,
   },
+  statusNetworks: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
   containerLogo: {
     alignItems: "center",
     justifyContent: "center",
@@ -57,6 +61,7 @@ const styles = StyleSheet.create({
     padding: 16,
     fontSize: 18,
     textAlign: "center",
+    color: "black",
   },
 
   title: {

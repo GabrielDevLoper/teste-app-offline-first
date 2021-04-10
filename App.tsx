@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StatusBar } from "react-native";
 
 import { Roboto_400Regular, Roboto_500Medium } from "@expo-google-fonts/roboto";
@@ -6,6 +6,7 @@ import { Ubuntu_700Bold, useFonts } from "@expo-google-fonts/ubuntu";
 import "react-native-gesture-handler";
 import { NavigationDrawer } from "./src/navigation";
 import AppLoading from "expo-app-loading";
+import { FuncionarioProvider } from "./src/hooks/useFuncionario";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,7 +26,9 @@ export default function App() {
             backgroundColor="transparent"
             translucent
           />
-          <NavigationDrawer />
+          <FuncionarioProvider>
+            <NavigationDrawer />
+          </FuncionarioProvider>
         </>
       )}
     </>

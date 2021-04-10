@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
-import { Text } from "native-base";
+import { useFuncionario } from "../../hooks/useFuncionario";
 
 interface HeaderProps {
   title?: string;
@@ -11,6 +11,7 @@ interface HeaderProps {
 
 export function Header({ title }: HeaderProps) {
   const navigation = useNavigation();
+  const { net } = useFuncionario();
 
   function handleLogout() {
     navigation.navigate("Sair");
@@ -32,6 +33,15 @@ export function Header({ title }: HeaderProps) {
         <Feather name="home" size={32} style={styles.icon} />
       </TouchableOpacity>
 
+      <TouchableOpacity disabled onPress={handleHome}>
+        <Feather
+          name={net ? "wifi" : "wifi-off"}
+          color={net ? "#76ff03" : "#ff1744"}
+          size={32}
+          style={styles.iconStatusNet}
+        />
+      </TouchableOpacity>
+
       <TouchableOpacity onPress={handleLogout}>
         <Feather name="log-out" size={32} style={styles.icon} />
       </TouchableOpacity>
@@ -47,11 +57,18 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingLeft: 15,
     paddingRight: 15,
+    paddingBottom: 10,
 
     backgroundColor: "#2196F3",
   },
   icon: {
     padding: 8,
     color: "white",
+  },
+
+  iconStatusNet: {
+    padding: 8,
+    backgroundColor: "#5bb2f8",
+    borderRadius: 50,
   },
 });
