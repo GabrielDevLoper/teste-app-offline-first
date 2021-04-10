@@ -1,10 +1,14 @@
 {
   "expo": {
-    "name": "teste-offline-first",
+    "name": "AppOfflineFirst",
     "slug": "teste-offline-first",
     "userInterfaceStyle": "automatic",
     "version": "1.0.0",
     "orientation": "portrait",
+    "platforms":[
+      "ios",
+      "android"
+    ],
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -18,13 +22,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sms.teste-offline-first"
     },
+   
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.sms.teste-offline-first",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
