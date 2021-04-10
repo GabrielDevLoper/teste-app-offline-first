@@ -49,7 +49,7 @@ export function CadastroFuncionario() {
   const [cpf, setCpf] = useState("");
   const [setor, setSetor] = useState(0);
 
-  const net = true;
+  const net = false;
 
   useEffect(() => {
     async function loadSetores() {

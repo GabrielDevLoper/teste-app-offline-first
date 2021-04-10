@@ -1,14 +1,19 @@
 import React from "react";
-import { Text, Image, View } from "react-native";
+import { Image, View, StyleSheet } from "react-native";
 import { Dashboard } from "../../components/Dashboard";
-import LottieView from "lottie-react-native";
 
 export function Home() {
   return (
     <Dashboard>
       <View>
-        <Image source={require("../../assets/sms.png")} />
+        <Image source={require("../../assets/sms.png")} resizeMode="contain" />
       </View>
     </Dashboard>
   );
 }
+
+const styles = StyleSheet.create({
+  imgLogo: {
+    width: 200,
+  },
+});
