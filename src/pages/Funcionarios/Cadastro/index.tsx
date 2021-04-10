@@ -42,7 +42,9 @@ export function CadastroFuncionario() {
   const [funcionariosOnline, setFuncionariosOnline] = useState<Funcionarios[]>(
     []
   );
-  const [net, setNet] = useState(NetInfo.useNetInfo().isConnected);
+  const net = NetInfo.useNetInfo().isConnected;
+
+  // const [net, setNet] = useState(false);
 
   const [setores, setSetores] = useState<Setores[]>([]);
 
@@ -50,8 +52,6 @@ export function CadastroFuncionario() {
   const [data_nascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
   const [setor, setSetor] = useState(0);
-
-  // const net = false;
 
   useEffect(() => {
     async function loadSetores() {
@@ -75,8 +75,10 @@ export function CadastroFuncionario() {
   // console.log({ online: funcionariosOnline });
 
   async function sycronizeFuncionarios() {
+    setLoading(true);
     const { data } = await api.get<Funcionarios[]>("/api/usuarios");
     setFuncionariosOnline(data);
+    setLoading(false);
 
     // recebendo todos os cpf dos usuarios que estão inseridos na api;
     const getCpf = funcionariosOnline.map((func) => {
