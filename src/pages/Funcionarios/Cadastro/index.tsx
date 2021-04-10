@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import React, { useEffect, useState } from "react";
+import { Picker } from "@react-native-picker/picker";
 import {
   ActivityIndicator,
   Alert,
@@ -15,7 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Dashboard } from "../../../components/Dashboard";
 import { api } from "../../../services/api";
 
-interface DataProps {
+interface Funcionarios {
   id?: number;
   nome: string;
   cpf: string;
@@ -34,17 +35,21 @@ interface Setores {
 
 export function CadastroFuncionario() {
   const [loading, setLoading] = useState(false);
-  const [funcionariosOffline, setFuncionariosOffline] = useState<DataProps[]>(
-    []
-  );
+  const [funcionariosOffline, setFuncionariosOffline] = useState<
+    Funcionarios[]
+  >([]);
   const [setores, setSetores] = useState<Setores[]>([]);
 
-  const [funcionariosOnline, setFuncionariosOnline] = useState<DataProps[]>([]);
+  const [funcionariosOnline, setFuncionariosOnline] = useState<Funcionarios[]>(
+    []
+  );
 
   const [nome, setNome] = useState("");
   const [data_nascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
-  const [setor, setSetor] = useState("");
+  const [setor, setSetor] = useState(0);
+
+  const net = true;
 
   useEffect(() => {
     async function loadSetores() {
@@ -66,8 +71,6 @@ export function CadastroFuncionario() {
 
   // console.log(NetInfo.useNetInfo().isConnected);
   // console.log({ online: funcionariosOnline });
-
-  const net = true;
 
   // recebendo todos os cpf dos usuarios que estão inseridos na api;
   const getCpf = funcionariosOnline.map((func) => {
@@ -92,8 +95,7 @@ export function CadastroFuncionario() {
       try {
         setLoading(true);
         removeFuncUndefined.map(async (func) => {
-          const { data } = await api.post<DataProps>("/api/usuarios", func);
-          console.log(data);
+          const { data } = await api.post<Funcionarios>("/api/usuarios", func);
         });
         setFuncionariosOffline([]);
         Alert.alert("", "Sincronização realizada com sucesso ✅", [
@@ -117,7 +119,7 @@ export function CadastroFuncionario() {
       nome,
       data_nascimento,
       cpf,
-      id_setor: Number(setor),
+      id_setor: setor,
     };
 
     //const response = await api.get("/api/usuarios");
@@ -125,11 +127,7 @@ export function CadastroFuncionario() {
       setLoading(true);
 
       if (!net) {
-        if (
-          nome.length === 0 ||
-          data_nascimento.length === 0 ||
-          setor.length === 0
-        ) {
+        if (nome.length === 0 || data_nascimento.length === 0 || setor === 0) {
           Alert.alert("", "Erro ao cadastrar funcionário   ❌", [
             { text: "OK", onPress: () => console.log("OK Pressed") },
           ]);
@@ -164,12 +162,12 @@ export function CadastroFuncionario() {
         setNome("");
         setCpf("");
         setDataNascimento("");
-        setSetor("");
+        setSetor(0);
 
         return;
       }
 
-      const { data } = await api.post<DataProps>("/api/usuarios", datas);
+      const { data } = await api.post<Funcionarios>("/api/usuarios", datas);
       console.log(data);
       setLoading(false);
 
@@ -180,7 +178,7 @@ export function CadastroFuncionario() {
       setNome("");
       setCpf("");
       setDataNascimento("");
-      setSetor("");
+      setSetor(0);
     } catch {
       setLoading(false);
 
@@ -223,12 +221,33 @@ export function CadastroFuncionario() {
               onChangeText={setCpf}
               placeholder="CPF"
             />
-            <TextInput
+
+            <TouchableOpacity style={styles.input}>
+              <Picker
+                selectedValue={setor}
+                style={styles.picker}
+                onValueChange={(itemValue) => setSetor(itemValue)}
+              >
+                <Picker.Item
+                  color="#8c8d8f"
+                  label="Selecione o setor"
+                  value="0"
+                />
+                {setores.map((setores) => (
+                  <Picker.Item
+                    key={setores.id}
+                    label={setores.nome}
+                    value={setores.id}
+                  />
+                ))}
+              </Picker>
+            </TouchableOpacity>
+            {/* <TextInput
               style={styles.input}
               onChangeText={setSetor}
               value={setor}
               placeholder="Setor"
-            />
+            /> */}
 
             <TouchableOpacity
               onPress={handleSalvar}
@@ -269,6 +288,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingHorizontal: 24,
     fontSize: 16,
+  },
+
+  picker: {
+    height: 50,
+    fontSize: 16,
+    paddingHorizontal: 24,
+    marginBottom: 8,
   },
 
   title: {
