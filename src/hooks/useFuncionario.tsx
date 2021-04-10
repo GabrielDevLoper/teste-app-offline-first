@@ -63,6 +63,21 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
 
   const [setores, setSetores] = useState<Setores[]>([]);
 
+  const net = NetInfo.useNetInfo().isConnected;
+  // const net = false;
+
+  useEffect(() => {
+    async function initFuncOffline() {
+      const funcOffline = await AsyncStorage.getItem("@funcionario_offline");
+      if (funcOffline) {
+        return setFuncionariosOffline(JSON.parse(funcOffline));
+      }
+
+      return setFuncionariosOffline([]);
+    }
+    initFuncOffline();
+  }, [net]);
+
   useEffect(() => {
     async function loadSetores() {
       const { data } = await api.get("/api/setores");
@@ -80,8 +95,6 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     loadSetores();
     loadFuncionariosOnline();
   }, []);
-
-  const net = true;
 
   async function sycronizeFuncionarios() {
     setLoading(true);
@@ -114,6 +127,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
           const { data } = await api.post<Funcionarios>("/api/usuarios", func);
         });
         setFuncionariosOffline([]);
+        await AsyncStorage.removeItem("@funcionario_offline");
         Alert.alert("", "Sincronização realizada com sucesso ✅", [
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
@@ -134,7 +148,8 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     id_setor: number
   ) {
     // console.log(removeFuncUndefined);
-    console.log(funcionariosOffline);
+    // console.log(funcionariosOffline);
+
     const datas = {
       nome,
       data_nascimento,
@@ -171,7 +186,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
 
         updateFuncionariosOffline.push(dataOffline);
         await AsyncStorage.setItem(
-          "@storage_Key",
+          "@funcionario_offline",
           JSON.stringify(updateFuncionariosOffline)
         );
 

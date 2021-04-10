@@ -23,7 +23,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sms.teste-offline-first"
+      "bundleIdentifier": "com.sms.testeofflinefirst"
     },
    
     "android": {
@@ -31,7 +31,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.sms.teste-offline-first",
+      "package": "com.sms.testeofflinefirst",
       "versionCode": 1
     },
     "web": {
