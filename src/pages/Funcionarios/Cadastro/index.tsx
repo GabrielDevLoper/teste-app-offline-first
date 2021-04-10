@@ -38,18 +38,20 @@ export function CadastroFuncionario() {
   const [funcionariosOffline, setFuncionariosOffline] = useState<
     Funcionarios[]
   >([]);
-  const [setores, setSetores] = useState<Setores[]>([]);
 
   const [funcionariosOnline, setFuncionariosOnline] = useState<Funcionarios[]>(
     []
   );
+  const [net, setNet] = useState(NetInfo.useNetInfo().isConnected);
+
+  const [setores, setSetores] = useState<Setores[]>([]);
 
   const [nome, setNome] = useState("");
   const [data_nascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
   const [setor, setSetor] = useState(0);
 
-  const net = false;
+  // const net = false;
 
   useEffect(() => {
     async function loadSetores() {
@@ -72,25 +74,28 @@ export function CadastroFuncionario() {
   // console.log(NetInfo.useNetInfo().isConnected);
   // console.log({ online: funcionariosOnline });
 
-  // recebendo todos os cpf dos usuarios que estão inseridos na api;
-  const getCpf = funcionariosOnline.map((func) => {
-    return func.cpf;
-  });
-
-  // verificando se ja existe usuarios na api, antes de sincronizar.
-  const matchFuncionarios = funcionariosOffline.map((func) => {
-    if (!getCpf.includes(func.cpf)) {
-      return func;
-    }
-  });
-
-  // função elimina todos os objetos undefined e retorna somente
-  // os funcionarios que não existe, evitando erro e duplicação
-  const removeFuncUndefined = matchFuncionarios.filter((func) => {
-    return func != null;
-  });
-
   async function sycronizeFuncionarios() {
+    const { data } = await api.get<Funcionarios[]>("/api/usuarios");
+    setFuncionariosOnline(data);
+
+    // recebendo todos os cpf dos usuarios que estão inseridos na api;
+    const getCpf = funcionariosOnline.map((func) => {
+      return func.cpf;
+    });
+
+    // verificando se ja existe usuarios na api, antes de sincronizar.
+    const matchFuncionarios = funcionariosOffline.map((func) => {
+      if (!getCpf.includes(func.cpf)) {
+        return func;
+      }
+    });
+
+    // função elimina todos os objetos undefined e retorna somente
+    // os funcionarios que não existe, evitando erro e duplicação
+    const removeFuncUndefined = matchFuncionarios.filter((func) => {
+      return func != null;
+    });
+
     if (removeFuncUndefined) {
       try {
         setLoading(true);
@@ -242,12 +247,6 @@ export function CadastroFuncionario() {
                 ))}
               </Picker>
             </TouchableOpacity>
-            {/* <TextInput
-              style={styles.input}
-              onChangeText={setSetor}
-              value={setor}
-              placeholder="Setor"
-            /> */}
 
             <TouchableOpacity
               onPress={handleSalvar}
