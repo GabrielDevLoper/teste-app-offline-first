@@ -32,6 +32,7 @@ interface FuncionarioContextProps {
   loading: boolean;
   funcionariosOffline: Funcionarios[];
   funcionariosOnline: Funcionarios[];
+  setoresOffline: Setores[];
   setores: Setores[];
   net: boolean;
   sycronizeFuncionarios: () => void;
@@ -62,6 +63,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
   );
 
   const [setores, setSetores] = useState<Setores[]>([]);
+  const [setoresOffline, setSetoresOffline] = useState<Setores[]>([]);
 
   const net = NetInfo.useNetInfo().isConnected;
   // const net = false;
@@ -75,6 +77,18 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
 
       return setFuncionariosOffline([]);
     }
+
+    async function initSetoresOffline() {
+      // const setoresOffline = [...setores];
+      const tempsetores = await AsyncStorage.getItem("@setores_offline");
+      if (tempsetores) {
+        return setSetoresOffline(JSON.parse(tempsetores));
+      }
+
+      return setSetoresOffline([]);
+    }
+
+    initSetoresOffline();
     initFuncOffline();
   }, [net]);
 
@@ -82,6 +96,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     async function loadSetores() {
       const { data } = await api.get("/api/setores");
       setSetores(data);
+      await AsyncStorage.setItem("@setores_offline", JSON.stringify(setores));
     }
 
     async function loadFuncionariosOnline() {
@@ -202,7 +217,6 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       }
 
       const { data } = await api.post<Funcionarios>("/api/usuarios", datas);
-      console.log(data);
       setLoading(false);
 
       Alert.alert("", "Sucesso ao cadastrar funcionário ✅", [
@@ -227,6 +241,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         loading,
         net,
         setores,
+        setoresOffline,
       }}
     >
       {children}

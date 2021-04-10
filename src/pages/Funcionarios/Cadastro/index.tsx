@@ -20,6 +20,7 @@ export function CadastroFuncionario() {
     loading,
     sycronizeFuncionarios,
     setores,
+    setoresOffline,
     net,
     funcionariosOffline,
   } = useFuncionario();
@@ -40,13 +41,14 @@ export function CadastroFuncionario() {
 
   async function addFuncionario() {
     handleSalvar(nome, data_nascimento, cpf, setor);
+
     clearFields();
   }
 
   return (
     <Dashboard>
       {loading ? (
-        <ActivityIndicator size={150} color="#2196F3" />
+        <ActivityIndicator size={40} color="#2196F3" />
       ) : (
         <>
           <Text style={styles.title}>Cadastro de funcionário</Text>
@@ -88,13 +90,21 @@ export function CadastroFuncionario() {
                   label="Selecione o setor"
                   value="0"
                 />
-                {setores.map((setores) => (
-                  <Picker.Item
-                    key={setores.id}
-                    label={setores.nome}
-                    value={setores.id}
-                  />
-                ))}
+                {!net
+                  ? setoresOffline.map((setores) => (
+                      <Picker.Item
+                        key={setores.id}
+                        label={setores.nome}
+                        value={setores.id}
+                      />
+                    ))
+                  : setores.map((setores) => (
+                      <Picker.Item
+                        key={setores.id}
+                        label={setores.nome}
+                        value={setores.id}
+                      />
+                    ))}
               </Picker>
             </TouchableOpacity>
 
@@ -102,7 +112,7 @@ export function CadastroFuncionario() {
               onPress={addFuncionario}
               style={styles.buttonSalvar}
             >
-              <Text style={styles.titleButtonText}>Cadastrar funcionário</Text>
+              <Text style={styles.titleButtonText}>Salvar</Text>
             </TouchableOpacity>
             {net && funcionariosOffline.length != 0 && (
               <TouchableOpacity
