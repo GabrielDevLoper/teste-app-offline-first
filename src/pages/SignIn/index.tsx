@@ -13,7 +13,7 @@ import { Feather } from "@expo/vector-icons";
 
 export function SignIn() {
   const navigation = useNavigation();
-  const [securePassword, setSecurePassword] = useState(false);
+  const [securePassword, setSecurePassword] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -59,13 +59,17 @@ export function SignIn() {
             placeholderTextColor="#9495a3"
           />
 
-          <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
-            <Feather
-              name={securePassword ? "eye" : "eye-off"}
-              size={32}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
+          {password.length != 0 && (
+            <TouchableOpacity
+              onPress={() => setSecurePassword(!securePassword)}
+            >
+              <Feather
+                name={securePassword ? "eye-off" : "eye"}
+                size={32}
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.containerButton}>
           <TouchableOpacity
