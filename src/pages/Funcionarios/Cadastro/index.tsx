@@ -87,7 +87,7 @@ export function CadastroFuncionario() {
               >
                 <Picker.Item
                   color="#8c8d8f"
-                  label="Selecione o setor"
+                  label="Selecione o setor que o funcionario trabalha"
                   value="0"
                 />
                 {setores.map((setores) => (
