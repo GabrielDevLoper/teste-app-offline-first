@@ -48,7 +48,7 @@ export function CadastroFuncionario() {
   return (
     <Dashboard>
       {loading ? (
-        <ActivityIndicator size={40} color="#2196F3" />
+        <ActivityIndicator size={100} color="#2196F3" />
       ) : (
         <>
           <Text style={styles.title}>Cadastro de funcionário</Text>
@@ -90,21 +90,13 @@ export function CadastroFuncionario() {
                   label="Selecione o setor"
                   value="0"
                 />
-                {!net
-                  ? setoresOffline.map((setores) => (
-                      <Picker.Item
-                        key={setores.id}
-                        label={setores.nome}
-                        value={setores.id}
-                      />
-                    ))
-                  : setores.map((setores) => (
-                      <Picker.Item
-                        key={setores.id}
-                        label={setores.nome}
-                        value={setores.id}
-                      />
-                    ))}
+                {setores.map((setores) => (
+                  <Picker.Item
+                    key={setores.id}
+                    label={setores.nome}
+                    value={setores.id}
+                  />
+                ))}
               </Picker>
             </TouchableOpacity>
 

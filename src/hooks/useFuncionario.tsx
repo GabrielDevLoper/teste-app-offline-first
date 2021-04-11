@@ -82,10 +82,10 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       // const setoresOffline = [...setores];
       const tempsetores = await AsyncStorage.getItem("@setores_offline");
       if (tempsetores) {
-        return setSetoresOffline(JSON.parse(tempsetores));
+        return setSetores(JSON.parse(tempsetores));
       }
 
-      return setSetoresOffline([]);
+      return setSetores([]);
     }
 
     initSetoresOffline();
@@ -96,7 +96,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     async function loadSetores() {
       const { data } = await api.get("/api/setores");
       setSetores(data);
-      await AsyncStorage.setItem("@setores_offline", JSON.stringify(setores));
+      await AsyncStorage.setItem("@setores_offline", JSON.stringify(data));
     }
 
     async function loadFuncionariosOnline() {
@@ -116,6 +116,27 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     const { data } = await api.get<Funcionarios[]>("/api/usuarios");
     setFuncionariosOnline(data);
     setLoading(false);
+
+    console.log(funcionariosOnline.length);
+
+    if (funcionariosOnline.length == undefined) {
+      console.log("oláa sincronize");
+      setLoading(true);
+
+      funcionariosOffline.map(async (func) => {
+        const { data } = await api.post<Funcionarios>("/api/usuarios", func);
+        console.log(data);
+      });
+
+      setFuncionariosOffline([]);
+      await AsyncStorage.removeItem("@funcionario_offline");
+      Alert.alert("", "Sincronização realizada com sucesso ✅", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+      setLoading(false);
+
+      return;
+    }
 
     // recebendo todos os cpf dos usuarios que estão inseridos na api;
     const getCpf = funcionariosOnline.map((func) => {
@@ -156,6 +177,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       }
     }
   }
+
   async function handleSalvar(
     nome: string,
     data_nascimento: string,
@@ -163,7 +185,6 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     id_setor: number
   ) {
     // console.log(removeFuncUndefined);
-    // console.log(funcionariosOffline);
 
     const datas = {
       nome,
