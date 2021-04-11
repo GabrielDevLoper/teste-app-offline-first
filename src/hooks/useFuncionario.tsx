@@ -12,17 +12,17 @@ import { Alert } from "react-native";
 import { api } from "../services/api";
 
 interface Funcionarios {
-  id?: number;
+  id?: string;
   nome: string;
   cpf: string;
-  id_setor: number;
+  id_setor: string;
   data_nascimento: string;
   created_at: Date;
   updated_at: Date;
 }
 
 interface Setores {
-  id?: number;
+  id?: string;
   nome: string;
   created_at: Date;
   updated_at: Date;
@@ -40,7 +40,7 @@ interface FuncionarioContextProps {
     nome: string,
     data_nascimento: string,
     cpf: string,
-    id_setor: number
+    id_setor: string
   ) => void;
 }
 
@@ -65,8 +65,8 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
   const [setores, setSetores] = useState<Setores[]>([]);
   const [setoresOffline, setSetoresOffline] = useState<Setores[]>([]);
 
-  const net = NetInfo.useNetInfo().isConnected;
-  // const net = false;
+  // const net = NetInfo.useNetInfo().isConnected;
+  const net = true;
 
   useEffect(() => {
     async function initFuncOffline() {
@@ -119,23 +119,30 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
 
     console.log(funcionariosOnline.length);
 
-    if (funcionariosOnline.length == undefined) {
+    if (funcionariosOnline.length == 0) {
       console.log("oláa sincronize");
-      setLoading(true);
+      try {
+        setLoading(true);
 
-      funcionariosOffline.map(async (func) => {
-        const { data } = await api.post<Funcionarios>("/funcionarios", func);
-        console.log(data);
-      });
+        funcionariosOffline.map(async (func) => {
+          const response = await api.post<Funcionarios>("/funcionarios", func);
+          console.log(response);
+        });
 
-      setFuncionariosOffline([]);
-      await AsyncStorage.removeItem("@funcionario_offline");
-      Alert.alert("", "Sincronização realizada com sucesso ✅", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
-      setLoading(false);
+        setFuncionariosOffline([]);
+        await AsyncStorage.removeItem("@funcionario_offline");
+        Alert.alert("", "Sincronização realizada com sucesso ✅", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+        setLoading(false);
 
-      return;
+        return;
+      } catch {
+        setLoading(false);
+        Alert.alert("", "Error", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      }
     }
 
     // recebendo todos os cpf dos usuarios que estão inseridos na api;
@@ -182,7 +189,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     nome: string,
     data_nascimento: string,
     cpf: string,
-    id_setor: number
+    id_setor: string
   ) {
     // console.log(removeFuncUndefined);
 
@@ -193,6 +200,8 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       id_setor,
     };
 
+    console.log(datas);
+
     //const response = await api.get("/api/usuarios");
     try {
       setLoading(true);
@@ -201,7 +210,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         if (
           nome.length === 0 ||
           data_nascimento.length === 0 ||
-          id_setor === 0
+          id_setor.length === 0
         ) {
           Alert.alert("", "Erro ao cadastrar funcionário   ❌", [
             { text: "OK", onPress: () => console.log("OK Pressed") },
@@ -237,7 +246,8 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         return;
       }
 
-      const { data } = await api.post<Funcionarios>("/funcionarios", datas);
+      const { data } = await api.post("funcionarios", datas);
+      console.log(data);
       setLoading(false);
 
       Alert.alert("", "Sucesso ao cadastrar funcionário ✅", [

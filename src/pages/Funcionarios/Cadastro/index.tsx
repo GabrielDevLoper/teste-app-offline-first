@@ -27,7 +27,7 @@ export function CadastroFuncionario() {
   const [nome, setNome] = useState("");
   const [data_nascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
-  const [setor, setSetor] = useState(0);
+  const [setor, setSetor] = useState("");
 
   // console.log(NetInfo.useNetInfo().isConnected);
   // console.log({ online: funcionariosOnline });
@@ -36,7 +36,7 @@ export function CadastroFuncionario() {
     setNome("");
     setCpf("");
     setDataNascimento("");
-    setSetor(0);
+    setSetor("");
   }
 
   async function addFuncionario() {
