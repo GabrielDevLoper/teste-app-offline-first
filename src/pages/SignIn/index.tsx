@@ -13,7 +13,7 @@ import { Feather } from "@expo/vector-icons";
 
 export function SignIn() {
   const navigation = useNavigation();
-
+  const [securePassword, setSecurePassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -54,8 +54,18 @@ export function SignIn() {
             onChangeText={setPassword}
             value={password}
             placeholder="Senha"
+            secureTextEntry={securePassword}
+            textContentType="password"
             placeholderTextColor="#9495a3"
           />
+
+          <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
+            <Feather
+              name={securePassword ? "eye" : "eye-off"}
+              size={32}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.containerButton}>
           <TouchableOpacity
@@ -118,7 +128,7 @@ const styles = StyleSheet.create({
   },
   inputArea: {
     flexDirection: "row",
-    borderBottomWidth: 1,
+    width: "95%",
     borderColor: "#e5ebec",
     paddingBottom: 10,
     borderRadius: 10,
@@ -129,7 +139,7 @@ const styles = StyleSheet.create({
   inputStyle: {
     width: 250,
     borderRadius: 10,
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_400Regular",
     fontSize: 20,
     color: "#5c5e70",
   },
@@ -141,7 +151,7 @@ const styles = StyleSheet.create({
   textButtonEntrar: {
     color: "white",
     fontSize: 20,
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_400Regular",
   },
 
   textButtonCadastrar: {
@@ -158,7 +168,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 20,
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_400Regular",
   },
 
   img: {
