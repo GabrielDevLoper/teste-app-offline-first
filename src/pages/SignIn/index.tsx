@@ -64,7 +64,7 @@ export function SignIn() {
               onPress={() => setSecurePassword(!securePassword)}
             >
               <Feather
-                name={securePassword ? "eye-off" : "eye"}
+                name={securePassword ? "eye" : "eye-off"}
                 size={32}
                 style={styles.icon}
               />
