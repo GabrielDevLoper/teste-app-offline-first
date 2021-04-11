@@ -94,14 +94,14 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
 
   useEffect(() => {
     async function loadSetores() {
-      const { data } = await api.get("/api/setores");
+      const { data } = await api.get("/setores");
       setSetores(data);
       await AsyncStorage.setItem("@setores_offline", JSON.stringify(data));
     }
 
     async function loadFuncionariosOnline() {
       setLoading(true);
-      const { data } = await api.get("/api/usuarios");
+      const { data } = await api.get("/funcionarios");
       setFuncionariosOnline(data);
 
       setLoading(false);
@@ -113,7 +113,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
 
   async function sycronizeFuncionarios() {
     setLoading(true);
-    const { data } = await api.get<Funcionarios[]>("/api/usuarios");
+    const { data } = await api.get<Funcionarios[]>("/funcionarios");
     setFuncionariosOnline(data);
     setLoading(false);
 
@@ -124,7 +124,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       setLoading(true);
 
       funcionariosOffline.map(async (func) => {
-        const { data } = await api.post<Funcionarios>("/api/usuarios", func);
+        const { data } = await api.post<Funcionarios>("/funcionarios", func);
         console.log(data);
       });
 
@@ -160,7 +160,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       try {
         setLoading(true);
         removeFuncUndefined.map(async (func) => {
-          const { data } = await api.post<Funcionarios>("/api/usuarios", func);
+          const { data } = await api.post<Funcionarios>("/funcionarios", func);
         });
         setFuncionariosOffline([]);
         await AsyncStorage.removeItem("@funcionario_offline");
@@ -237,7 +237,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         return;
       }
 
-      const { data } = await api.post<Funcionarios>("/api/usuarios", datas);
+      const { data } = await api.post<Funcionarios>("/funcionarios", datas);
       setLoading(false);
 
       Alert.alert("", "Sucesso ao cadastrar funcionário ✅", [

@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://api-app-offline-first.herokuapp.com",
+  baseURL: "https://api-teste-app-offline-first.herokuapp.com",
 });
