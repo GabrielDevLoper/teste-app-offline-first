@@ -7,6 +7,8 @@ import "react-native-gesture-handler";
 import { NavigationDrawer } from "./src/navigation";
 import AppLoading from "expo-app-loading";
 import { FuncionarioProvider } from "./src/hooks/useFuncionario";
+import { SetorProvider } from "./src/hooks/useSetor";
+import { NetProvider } from "./src/hooks/useNetStatus";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -26,9 +28,13 @@ export default function App() {
             backgroundColor="transparent"
             translucent
           />
-          <FuncionarioProvider>
-            <NavigationDrawer />
-          </FuncionarioProvider>
+          <NetProvider>
+            <FuncionarioProvider>
+              <SetorProvider>
+                <NavigationDrawer />
+              </SetorProvider>
+            </FuncionarioProvider>
+          </NetProvider>
         </>
       )}
     </>

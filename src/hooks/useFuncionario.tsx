@@ -20,20 +20,19 @@ interface Funcionarios {
   created_at: Date;
   updated_at: Date;
 }
-
+// RETIRAR
 interface Setores {
   id?: string;
   nome: string;
   created_at: Date;
   updated_at: Date;
 }
+//FIM RETIRAR
 
 interface FuncionarioContextProps {
   loading: boolean;
   funcionariosOffline: Funcionarios[];
   funcionariosOnline: Funcionarios[];
-  setoresOffline: Setores[];
-  setores: Setores[];
   net: boolean;
   sycronizeFuncionarios: () => void;
   handleSalvar: (
@@ -42,13 +41,6 @@ interface FuncionarioContextProps {
     cpf: string,
     id_setor: string
   ) => void;
-
-  errors?: {
-    nome: boolean;
-    data_nascimento: boolean;
-    cpf: boolean;
-    id_setor: boolean;
-  };
 }
 
 interface FuncionarioProviderProps {
@@ -60,13 +52,6 @@ const FuncionarioContext = createContext<FuncionarioContextProps>(
 );
 
 export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
-  let errors = {
-    nome: false,
-    data_nascimento: false,
-    cpf: false,
-    id_setor: false,
-  };
-
   const [loading, setLoading] = useState(false);
   const [funcionariosOffline, setFuncionariosOffline] = useState<
     Funcionarios[]
@@ -76,11 +61,8 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     []
   );
 
-  const [setores, setSetores] = useState<Setores[]>([]);
-  const [setoresOffline, setSetoresOffline] = useState<Setores[]>([]);
-
-  // const net = NetInfo.useNetInfo().isConnected;
-  const net = true;
+  const net = NetInfo.useNetInfo().isConnected;
+  // const net = false;
 
   useEffect(() => {
     async function initFuncOffline() {
@@ -92,27 +74,10 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       return setFuncionariosOffline([]);
     }
 
-    async function initSetoresOffline() {
-      // const setoresOffline = [...setores];
-      const tempsetores = await AsyncStorage.getItem("@setores_offline");
-      if (tempsetores) {
-        return setSetores(JSON.parse(tempsetores));
-      }
-
-      return setSetores([]);
-    }
-
-    initSetoresOffline();
     initFuncOffline();
   }, [net]);
 
   useEffect(() => {
-    async function loadSetores() {
-      const { data } = await api.get("/setores");
-      setSetores(data);
-      await AsyncStorage.setItem("@setores_offline", JSON.stringify(data));
-    }
-
     async function loadFuncionariosOnline() {
       setLoading(true);
       const { data } = await api.get("/funcionarios");
@@ -121,7 +86,6 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       setLoading(false);
     }
 
-    loadSetores();
     loadFuncionariosOnline();
   }, []);
 
@@ -283,9 +247,6 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         handleSalvar,
         loading,
         net,
-        setores,
-        setoresOffline,
-        errors,
       }}
     >
       {children}

@@ -8,6 +8,8 @@ import { Funcionarios } from "./pages/Funcionarios";
 import { CadastroFuncionario } from "./pages/Funcionarios/Cadastro";
 import { Home } from "./pages/Home";
 import { SignIn } from "./pages/SignIn";
+import { Setores } from "./pages/Setores";
+import { CadastroSetor } from "./pages/Setores/Cadastro";
 
 const Drawer = createDrawerNavigator();
 
@@ -49,6 +51,22 @@ function FuncionarioDrawer() {
       }}
       drawerType="slide"
     >
+      <Drawer.Screen
+        name="Setores"
+        component={Setores}
+        options={{
+          drawerIcon: () => <Feather name="users" size={32} color="#2196F3" />,
+        }}
+      />
+
+      <Drawer.Screen
+        name="Cadastrar Setor"
+        component={CadastroSetor}
+        options={{
+          drawerIcon: () => <Feather name="users" size={32} color="#2196F3" />,
+        }}
+      />
+
       <Drawer.Screen
         name="Funcionarios"
         component={Funcionarios}

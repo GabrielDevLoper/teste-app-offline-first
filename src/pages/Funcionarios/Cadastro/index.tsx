@@ -9,31 +9,28 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-// import {  } from "react-native-gesture-handler";
 import { TextInputMask } from "react-native-masked-text";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Dashboard } from "../../../components/Dashboard";
 import { useFuncionario } from "../../../hooks/useFuncionario";
-// import { TextInput } from "react-native-paper";
+import { useSetor } from "../../../hooks/useSetor";
+import NetInfo from "@react-native-community/netinfo";
+import { useNetStatus } from "../../../hooks/useNetStatus";
 
 export function CadastroFuncionario() {
   const {
     handleSalvar,
     loading,
     sycronizeFuncionarios,
-    setores,
-    setoresOffline,
-    net,
     funcionariosOffline,
-    errors,
   } = useFuncionario();
+  const { setores, setoresItermediadores } = useSetor();
+  const { net } = useNetStatus();
+
   const [nome, setNome] = useState("");
   const [data_nascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
   const [setor, setSetor] = useState("");
-
-  // console.log(NetInfo.useNetInfo().isConnected);
-  // console.log({ online: funcionariosOnline });
 
   function clearFields() {
     setNome("");
@@ -94,13 +91,21 @@ export function CadastroFuncionario() {
                   label="Selecione o setor que o funcionario trabalha"
                   value="0"
                 />
-                {setores.map((setores) => (
-                  <Picker.Item
-                    key={setores.id}
-                    label={setores.nome}
-                    value={setores.id}
-                  />
-                ))}
+                {net
+                  ? setores.map((setores) => (
+                      <Picker.Item
+                        key={setores.id}
+                        label={setores.nome}
+                        value={setores.id}
+                      />
+                    ))
+                  : setoresItermediadores.map((setores) => (
+                      <Picker.Item
+                        key={setores.id}
+                        label={setores.nome}
+                        value={setores.id}
+                      />
+                    ))}
               </Picker>
             </TouchableOpacity>
 
