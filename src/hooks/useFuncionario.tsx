@@ -42,6 +42,13 @@ interface FuncionarioContextProps {
     cpf: string,
     id_setor: string
   ) => void;
+
+  errors?: {
+    nome: boolean;
+    data_nascimento: boolean;
+    cpf: boolean;
+    id_setor: boolean;
+  };
 }
 
 interface FuncionarioProviderProps {
@@ -53,6 +60,13 @@ const FuncionarioContext = createContext<FuncionarioContextProps>(
 );
 
 export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
+  let errors = {
+    nome: false,
+    data_nascimento: false,
+    cpf: false,
+    id_setor: false,
+  };
+
   const [loading, setLoading] = useState(false);
   const [funcionariosOffline, setFuncionariosOffline] = useState<
     Funcionarios[]
@@ -168,6 +182,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         setLoading(true);
         removeFuncUndefined.map(async (func) => {
           const { data } = await api.post<Funcionarios>("/funcionarios", func);
+          setFuncionariosOnline([...funcionariosOnline, data]);
         });
         setFuncionariosOffline([]);
         await AsyncStorage.removeItem("@funcionario_offline");
@@ -200,9 +215,6 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       id_setor,
     };
 
-    console.log(datas);
-
-    //const response = await api.get("/api/usuarios");
     try {
       setLoading(true);
 
@@ -247,7 +259,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       }
 
       const { data } = await api.post("funcionarios", datas);
-      console.log(data);
+
       setLoading(false);
 
       Alert.alert("", "Sucesso ao cadastrar funcionário ✅", [
@@ -273,6 +285,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         net,
         setores,
         setoresOffline,
+        errors,
       }}
     >
       {children}

@@ -7,12 +7,14 @@ import {
   Text,
   ToastAndroid,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+// import {  } from "react-native-gesture-handler";
 import { TextInputMask } from "react-native-masked-text";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Dashboard } from "../../../components/Dashboard";
 import { useFuncionario } from "../../../hooks/useFuncionario";
+// import { TextInput } from "react-native-paper";
 
 export function CadastroFuncionario() {
   const {
@@ -23,6 +25,7 @@ export function CadastroFuncionario() {
     setoresOffline,
     net,
     funcionariosOffline,
+    errors,
   } = useFuncionario();
   const [nome, setNome] = useState("");
   const [data_nascimento, setDataNascimento] = useState("");
@@ -58,6 +61,7 @@ export function CadastroFuncionario() {
               onChangeText={setNome}
               value={nome}
               placeholder="Nome"
+              // error={errors?.nome}
             />
 
             <TextInputMask
