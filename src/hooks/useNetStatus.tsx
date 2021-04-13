@@ -1,5 +1,5 @@
+import React, { useContext, createContext, ReactNode } from "react";
 import { useNetInfo } from "@react-native-community/netinfo";
-import { useContext, createContext, ReactNode } from "react";
 
 interface NetContextProps {
   net: boolean;
@@ -13,6 +13,7 @@ const NetContext = createContext<NetContextProps>({} as NetContextProps);
 
 export function NetProvider({ children }: NetProviderProps) {
   let net = useNetInfo().isConnected;
+  // let net = true;
 
   return <NetContext.Provider value={{ net }}>{children}</NetContext.Provider>;
 }

@@ -6,16 +6,32 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Dashboard } from "../../../components/Dashboard";
 import { useSetor } from "../../../hooks/useSetor";
+import { useNetStatus } from "../../../hooks/useNetStatus";
 
 export function CadastroSetor() {
-  const { nome, setNome, handleSalvar, loading } = useSetor();
+  const {
+    nome,
+    setNome,
+    handleSalvar,
+    loading,
+    sycronizeSetores,
+    setoresOffline,
+  } = useSetor();
+  const { net } = useNetStatus();
 
   async function addSetor() {
+    if (nome.length === 0) {
+      Alert.alert("", "Nome é obrigatório❌", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+      return;
+    }
     handleSalvar();
   }
 
@@ -37,6 +53,14 @@ export function CadastroSetor() {
             <TouchableOpacity onPress={addSetor} style={styles.buttonSalvar}>
               <Text style={styles.titleButtonText}>Salvar</Text>
             </TouchableOpacity>
+            {net && setoresOffline.length != 0 && (
+              <TouchableOpacity
+                onPress={sycronizeSetores}
+                style={styles.buttonSalvar}
+              >
+                <Text style={styles.titleButtonText}>Sincronizar dados</Text>
+              </TouchableOpacity>
+            )}
           </SafeAreaView>
         </>
       )}

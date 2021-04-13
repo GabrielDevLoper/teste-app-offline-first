@@ -7,6 +7,7 @@ import {
   View,
   Image,
   Keyboard,
+  useColorScheme,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
@@ -17,6 +18,8 @@ export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const dark = useColorScheme();
+
   function handleGoToDashboard() {
     navigation.navigate("Home");
   }
@@ -25,11 +28,19 @@ export function SignIn() {
     <>
       <View style={styles.container}>
         <View style={styles.containerLogo}>
-          <Image
-            style={styles.img}
-            source={require("../../assets/sms.png")}
-            resizeMode="contain"
-          />
+          {dark === "dark" ? (
+            <Image
+              style={styles.img}
+              source={require(`../../assets/sms-branca.png`)}
+              resizeMode="contain"
+            />
+          ) : (
+            <Image
+              style={styles.img}
+              source={require(`../../assets/sms.png`)}
+              resizeMode="contain"
+            />
+          )}
         </View>
         <View style={styles.containerTitle}>
           <Text style={styles.title}>Acesso ao sistema</Text>

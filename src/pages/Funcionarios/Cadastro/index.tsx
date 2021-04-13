@@ -14,7 +14,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Dashboard } from "../../../components/Dashboard";
 import { useFuncionario } from "../../../hooks/useFuncionario";
 import { useSetor } from "../../../hooks/useSetor";
-import NetInfo from "@react-native-community/netinfo";
 import { useNetStatus } from "../../../hooks/useNetStatus";
 
 export function CadastroFuncionario() {
@@ -96,14 +95,14 @@ export function CadastroFuncionario() {
                       <Picker.Item
                         key={setores.id}
                         label={setores.nome}
-                        value={setores.id}
+                        value={setores.nome}
                       />
                     ))
                   : setoresItermediadores.map((setores) => (
                       <Picker.Item
                         key={setores.id}
                         label={setores.nome}
-                        value={setores.id}
+                        value={setores.nome}
                       />
                     ))}
               </Picker>

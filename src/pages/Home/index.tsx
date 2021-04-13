@@ -1,12 +1,23 @@
 import React from "react";
-import { Image, View, StyleSheet } from "react-native";
+import { Image, View, StyleSheet, useColorScheme } from "react-native";
 import { Dashboard } from "../../components/Dashboard";
 
 export function Home() {
+  const dark = useColorScheme();
   return (
     <Dashboard>
       <View>
-        <Image source={require("../../assets/sms.png")} resizeMode="contain" />
+        {dark === "dark" ? (
+          <Image
+            source={require(`../../assets/sms-branca.png`)}
+            resizeMode="contain"
+          />
+        ) : (
+          <Image
+            source={require(`../../assets/sms.png`)}
+            resizeMode="contain"
+          />
+        )}
       </View>
     </Dashboard>
   );

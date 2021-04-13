@@ -5,11 +5,11 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import NetInfo from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { Alert } from "react-native";
 import { api } from "../services/api";
+import { useNetStatus } from "./useNetStatus";
 
 interface Funcionarios {
   id?: string;
@@ -20,14 +20,6 @@ interface Funcionarios {
   created_at: Date;
   updated_at: Date;
 }
-// RETIRAR
-interface Setores {
-  id?: string;
-  nome: string;
-  created_at: Date;
-  updated_at: Date;
-}
-//FIM RETIRAR
 
 interface FuncionarioContextProps {
   loading: boolean;
@@ -61,8 +53,7 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     []
   );
 
-  const net = NetInfo.useNetInfo().isConnected;
-  // const net = false;
+  const { net } = useNetStatus();
 
   useEffect(() => {
     async function initFuncOffline() {
@@ -94,8 +85,6 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     const { data } = await api.get<Funcionarios[]>("/funcionarios");
     setFuncionariosOnline(data);
     setLoading(false);
-
-    console.log(funcionariosOnline.length);
 
     if (funcionariosOnline.length == 0) {
       console.log("oláa sincronize");
@@ -141,11 +130,15 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       return func != null;
     });
 
-    if (removeFuncUndefined) {
-      try {
+    console.log(removeFuncUndefined);
+
+    try {
+      if (removeFuncUndefined) {
         setLoading(true);
         removeFuncUndefined.map(async (func) => {
-          const { data } = await api.post<Funcionarios>("/funcionarios", func);
+          const { data } = await api.post<Funcionarios>("funcionarios", func);
+          console.log(data);
+
           setFuncionariosOnline([...funcionariosOnline, data]);
         });
         setFuncionariosOffline([]);
@@ -154,13 +147,13 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
           { text: "OK", onPress: () => console.log("OK Pressed") },
         ]);
         setLoading(false);
-      } catch {
-        setLoading(false);
-
-        Alert.alert("", "Erro na sincronização", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
       }
+    } catch {
+      setLoading(false);
+
+      Alert.alert("", "Erro na sincronização", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
     }
   }
 
@@ -206,12 +199,13 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         const updateFuncionariosOffline = [...funcionariosOffline];
 
         updateFuncionariosOffline.push(dataOffline);
+
+        setFuncionariosOffline(updateFuncionariosOffline);
+
         await AsyncStorage.setItem(
           "@funcionario_offline",
           JSON.stringify(updateFuncionariosOffline)
         );
-
-        setFuncionariosOffline(updateFuncionariosOffline);
 
         setLoading(false);
 

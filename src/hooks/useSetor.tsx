@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { api } from "../services/api";
 import { Alert } from "react-native";
+import { useNetStatus } from "./useNetStatus";
 
 interface SetorProviderProps {
   children?: ReactNode;
@@ -30,11 +31,14 @@ interface SetorContextProps {
   setores: Setores[];
   nome: string;
   setNome: React.Dispatch<React.SetStateAction<string>>;
+  carregarSetoresOnline: () => void;
+  sycronizeSetores: () => void;
 }
 
 const SetorContext = createContext<SetorContextProps>({} as SetorContextProps);
 
 export function SetorProvider({ children }: SetorProviderProps) {
+  const { net } = useNetStatus();
   const [loading, setLoading] = useState(false);
   const [setores, setSetores] = useState<Setores[]>([]);
   const [setoresOffline, setSetoresOffline] = useState<Setores[]>([]);
@@ -44,22 +48,40 @@ export function SetorProvider({ children }: SetorProviderProps) {
 
   const [nome, setNome] = useState("");
 
-  const net = NetInfo.useNetInfo().isConnected;
-  // const net = false;
-
   async function carregarSetoresOffline() {
-    const tempsetores = await AsyncStorage.getItem("@setores_offline");
-    if (tempsetores) {
-      setSetoresOffline(JSON.parse(tempsetores));
-      setSetoresItermediadores([...setores, JSON.parse(tempsetores)]);
+    const setoresOfflineTemp = await AsyncStorage.getItem("@setores_offline");
+    const setoresOnlineTemp = await AsyncStorage.getItem("@setores_online");
+
+    if (setoresOfflineTemp && setoresOnlineTemp) {
+      setSetoresOffline(JSON.parse(setoresOfflineTemp));
+      setSetoresItermediadores([
+        ...JSON.parse(setoresOnlineTemp),
+        ...JSON.parse(setoresOfflineTemp),
+      ]);
+
       return;
     }
+
+    if (setoresOnlineTemp) {
+      setSetoresItermediadores([...JSON.parse(setoresOnlineTemp)]);
+
+      return;
+    }
+
+    return setSetoresOffline([]);
   }
 
   async function carregarSetoresOnline() {
-    const { data } = await api.get("setores");
-    setSetores(data);
-    await AsyncStorage.setItem("@setores_online", JSON.stringify(data));
+    if (net) {
+      setLoading(true);
+
+      const { data } = await api.get("setores");
+      setSetores(data);
+      await AsyncStorage.setItem("@setores_online", JSON.stringify(data));
+      setLoading(false);
+
+      return;
+    }
   }
 
   useEffect(() => {
@@ -68,7 +90,70 @@ export function SetorProvider({ children }: SetorProviderProps) {
 
   useEffect(() => {
     carregarSetoresOnline();
-  }, []);
+  }, [net]);
+
+  async function sycronizeSetores() {
+    carregarSetoresOnline();
+
+    if (setores.length === 0) {
+      setLoading(true);
+      setoresOffline.map(async (setor) => {
+        const { data } = await api.post<Setores>("setores", setor);
+
+        setSetores([...setores, data]);
+      });
+
+      Alert.alert("", "Setores sincronizados com sucesso ✅", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+
+      setSetoresOffline([]);
+      await AsyncStorage.removeItem("@setores_offline");
+      setLoading(false);
+
+      return;
+    }
+
+    // recebendo todos os cpf dos usuarios que estão inseridos na api;
+    const getUniqueNome = setores.map((setor) => {
+      return setor.nome;
+    });
+
+    // verificando se ja existe usuarios na api, antes de sincronizar.
+    const matchSetores = setoresOffline.map((setor) => {
+      if (!getUniqueNome.includes(setor.nome)) {
+        return setor;
+      }
+    });
+
+    // função elimina todos os objetos undefined e retorna somente
+    // os funcionarios que não existe, evitando erro e duplicação
+    const removeSetorUndefined = matchSetores.filter((setor) => {
+      return setor != null;
+    });
+
+    if (removeSetorUndefined) {
+      try {
+        setLoading(true);
+        removeSetorUndefined.map(async (setor) => {
+          const { data } = await api.post<Setores>("/setores", setor);
+          setSetores([...setores, data]);
+        });
+        setSetoresOffline([]);
+        await AsyncStorage.removeItem("@setores_offline");
+        Alert.alert("", "Sincronização realizada com sucesso ✅", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+        setLoading(false);
+      } catch {
+        setLoading(false);
+
+        Alert.alert("", "Erro na sincronização", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      }
+    }
+  }
 
   async function handleSalvar() {
     try {
@@ -76,7 +161,7 @@ export function SetorProvider({ children }: SetorProviderProps) {
       if (!net) {
         const data_setor = {
           id: uuid.v4().toString(),
-          nome,
+          nome: nome.toLowerCase(),
           created_at: new Date(),
           updated_at: new Date(),
         };
@@ -99,13 +184,16 @@ export function SetorProvider({ children }: SetorProviderProps) {
         ]);
 
         setLoading(false);
+
         carregarSetoresOffline();
+
         return;
       }
 
       const { data } = await api.post<Setores>("setores", { nome });
 
       setSetores([...setores, data]);
+      carregarSetoresOnline();
 
       setNome("");
 
@@ -132,6 +220,8 @@ export function SetorProvider({ children }: SetorProviderProps) {
         setNome,
         nome,
         loading,
+        sycronizeSetores,
+        carregarSetoresOnline,
       }}
     >
       {children}

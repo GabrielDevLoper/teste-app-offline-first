@@ -9,6 +9,7 @@ import AppLoading from "expo-app-loading";
 import { FuncionarioProvider } from "./src/hooks/useFuncionario";
 import { SetorProvider } from "./src/hooks/useSetor";
 import { NetProvider } from "./src/hooks/useNetStatus";
+import { AppearanceProvider } from "react-native-appearance";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -28,13 +29,15 @@ export default function App() {
             backgroundColor="transparent"
             translucent
           />
-          <NetProvider>
-            <FuncionarioProvider>
-              <SetorProvider>
-                <NavigationDrawer />
-              </SetorProvider>
-            </FuncionarioProvider>
-          </NetProvider>
+          <AppearanceProvider>
+            <NetProvider>
+              <FuncionarioProvider>
+                <SetorProvider>
+                  <NavigationDrawer />
+                </SetorProvider>
+              </FuncionarioProvider>
+            </NetProvider>
+          </AppearanceProvider>
         </>
       )}
     </>
