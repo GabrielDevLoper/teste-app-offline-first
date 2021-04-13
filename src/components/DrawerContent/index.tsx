@@ -39,7 +39,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
               </View>
             </View>
             <View style={styles.row}>
-              <View style={styles.section}>
+              {/* <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
                   80
                 </Paragraph>
@@ -50,7 +50,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
                   80
                 </Paragraph>
                 <Caption style={styles.caption}>Following</Caption>
-              </View>
+              </View> */}
             </View>
           </View>
           <Drawer.Section style={styles.drawerSection}>
