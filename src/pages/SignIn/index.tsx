@@ -8,9 +8,11 @@ import {
   Image,
   Keyboard,
   useColorScheme,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { api } from "../../services/api";
 
 export function SignIn() {
   const navigation = useNavigation();
@@ -19,6 +21,20 @@ export function SignIn() {
   const [password, setPassword] = useState("");
 
   const dark = useColorScheme();
+
+  async function handleLogin() {
+    try {
+      const { data } = await api.post("sessions", { email, password });
+      if (data.token) {
+        handleGoToDashboard();
+      }
+
+      setEmail("");
+      setPassword("");
+    } catch {
+      Alert.alert("Usuário ou senha incorretas");
+    }
+  }
 
   function handleGoToDashboard() {
     navigation.navigate("Home");
@@ -83,10 +99,7 @@ export function SignIn() {
           )}
         </View>
         <View style={styles.containerButton}>
-          <TouchableOpacity
-            style={styles.buttonEntrar}
-            onPress={handleGoToDashboard}
-          >
+          <TouchableOpacity style={styles.buttonEntrar} onPress={handleLogin}>
             <Text style={styles.textButtonEntrar}>Entrar</Text>
           </TouchableOpacity>
         </View>

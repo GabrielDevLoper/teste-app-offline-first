@@ -28,7 +28,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
               <Avatar.Image
                 source={{
                   uri:
-                    "https://avatars.githubusercontent.com/u/46577395?s=400&u=4ba4f3b43f389480f38622b09f49d2d6bb4abd3e&v=4",
+                    "https://jvmnegociosimobiliarios.com.br/assets/img/avatar/default.png",
                 }}
                 size={60}
               />
