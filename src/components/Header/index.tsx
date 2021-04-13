@@ -4,6 +4,8 @@ import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { useFuncionario } from "../../hooks/useFuncionario";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuths } from "../../hooks/useAuth";
 
 interface HeaderProps {
   title?: string;
@@ -11,11 +13,8 @@ interface HeaderProps {
 
 export function Header({ title }: HeaderProps) {
   const navigation = useNavigation();
+  const { handleLogout } = useAuths();
   const { net } = useFuncionario();
-
-  function handleLogout() {
-    navigation.navigate("Sair");
-  }
 
   function handleHome() {
     navigation.navigate("Home");

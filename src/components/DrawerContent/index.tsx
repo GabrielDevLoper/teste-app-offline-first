@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import {
   Avatar,
@@ -17,8 +17,11 @@ import {
   DrawerItem,
 } from "@react-navigation/drawer";
 import { Feather } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuths } from "../../hooks/useAuth";
 
 export function DrawerContent(props: DrawerContentComponentProps) {
+  const { nome, handleLogout } = useAuths();
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -34,8 +37,8 @@ export function DrawerContent(props: DrawerContentComponentProps) {
               />
 
               <View style={{ marginLeft: 15, flexDirection: "column" }}>
-                <Title style={styles.title}>Gabriel Barreto</Title>
-                <Caption style={styles.caption}>ADM</Caption>
+                <Title style={styles.title}>{nome}</Title>
+                <Caption style={styles.caption}>{nome}</Caption>
               </View>
             </View>
             <View style={styles.row}>
@@ -99,9 +102,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
           icon={({ color, size }) => (
             <Feather name="log-out" color={color} size={size} />
           )}
-          onPress={() => {
-            props.navigation.navigate("Sair");
-          }}
+          onPress={handleLogout}
         />
       </Drawer.Section>
     </View>

@@ -10,6 +10,7 @@ import { FuncionarioProvider } from "./src/hooks/useFuncionario";
 import { SetorProvider } from "./src/hooks/useSetor";
 import { NetProvider } from "./src/hooks/useNetStatus";
 import { AppearanceProvider } from "react-native-appearance";
+import { AuthProvider } from "./src/hooks/useAuth";
 
 export default function App() {
   const [fontsLoaded] = useFonts({

@@ -6,111 +6,110 @@ import {
   TouchableOpacity,
   View,
   Image,
-  Keyboard,
   useColorScheme,
   Alert,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
-import { api } from "../../services/api";
+import { useAuths } from "../../hooks/useAuth";
+import { useNavigation } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-paper";
 
 export function SignIn() {
   const navigation = useNavigation();
-  const [securePassword, setSecurePassword] = useState(true);
+  const { handleLogin, logado, loadingAuth } = useAuths();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [securePassword, setSecurePassword] = useState(true);
 
   const dark = useColorScheme();
 
-  async function handleLogin() {
-    try {
-      const { data } = await api.post("sessions", { email, password });
-      if (data.token) {
-        handleGoToDashboard();
-      }
-
-      setEmail("");
-      setPassword("");
-    } catch {
-      Alert.alert("Usuário ou senha incorretas");
-    }
-  }
-
-  function handleGoToDashboard() {
-    navigation.navigate("Home");
+  async function handleSignIn() {
+    handleLogin(email, password);
+    setEmail("");
+    setPassword("");
   }
 
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.containerLogo}>
-          {dark === "dark" ? (
-            <Image
-              style={styles.img}
-              source={require(`../../assets/sms-branca.png`)}
-              resizeMode="contain"
-            />
-          ) : (
-            <Image
-              style={styles.img}
-              source={require(`../../assets/sms.png`)}
-              resizeMode="contain"
-            />
-          )}
+      {loadingAuth ? (
+        <View style={styles.container}>
+          <ActivityIndicator size={100} color="#2196F3" />
         </View>
-        <View style={styles.containerTitle}>
-          <Text style={styles.title}>Acesso ao sistema</Text>
-        </View>
-        <View style={styles.inputArea}>
-          <Feather name="user" size={32} style={styles.icon} />
-          <TextInput
-            inlineImageLeft="search"
-            style={styles.inputStyle}
-            onChangeText={setEmail}
-            value={email}
-            placeholder="Email"
-            placeholderTextColor="#9495a3"
-          />
-        </View>
-        <View style={styles.inputArea}>
-          <Feather name="key" size={32} style={styles.icon} />
-
-          <TextInput
-            autoCompleteType="password"
-            style={styles.inputStyle}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Senha"
-            secureTextEntry={securePassword}
-            textContentType="password"
-            placeholderTextColor="#9495a3"
-          />
-
-          {password.length != 0 && (
-            <TouchableOpacity
-              onPress={() => setSecurePassword(!securePassword)}
-            >
-              <Feather
-                name={securePassword ? "eye" : "eye-off"}
-                size={32}
-                style={styles.icon}
+      ) : (
+        <View style={styles.container}>
+          <View style={styles.containerLogo}>
+            {dark === "dark" ? (
+              <Image
+                style={styles.img}
+                source={require(`../../assets/sms-branca.png`)}
+                resizeMode="contain"
               />
+            ) : (
+              <Image
+                style={styles.img}
+                source={require(`../../assets/sms.png`)}
+                resizeMode="contain"
+              />
+            )}
+          </View>
+          <View style={styles.containerTitle}>
+            <Text style={styles.title}>Acesso ao sistema</Text>
+          </View>
+          <View style={styles.inputArea}>
+            <Feather name="user" size={32} style={styles.icon} />
+            <TextInput
+              inlineImageLeft="search"
+              style={styles.inputStyle}
+              onChangeText={setEmail}
+              value={email}
+              placeholder="Email"
+              placeholderTextColor="#9495a3"
+            />
+          </View>
+          <View style={styles.inputArea}>
+            <Feather name="key" size={32} style={styles.icon} />
+
+            <TextInput
+              autoCompleteType="password"
+              style={styles.inputStyle}
+              onChangeText={setPassword}
+              value={password}
+              placeholder="Senha"
+              secureTextEntry={securePassword}
+              textContentType="password"
+              placeholderTextColor="#9495a3"
+            />
+
+            {password.length != 0 && (
+              <TouchableOpacity
+                onPress={() => setSecurePassword(!securePassword)}
+              >
+                <Feather
+                  name={securePassword ? "eye" : "eye-off"}
+                  size={32}
+                  style={styles.icon}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+          <View style={styles.containerButton}>
+            <TouchableOpacity
+              style={styles.buttonEntrar}
+              onPress={handleSignIn}
+            >
+              <Text style={styles.textButtonEntrar}>Entrar</Text>
             </TouchableOpacity>
-          )}
+          </View>
+          <View style={styles.containerButton}>
+            <TouchableOpacity style={styles.buttonCadastrar} onPress={() => {}}>
+              <Text style={styles.textButtonCadastrar}>
+                Clique aqui e cadastre-se !
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.containerButton}>
-          <TouchableOpacity style={styles.buttonEntrar} onPress={handleLogin}>
-            <Text style={styles.textButtonEntrar}>Entrar</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.containerButton}>
-          <TouchableOpacity style={styles.buttonCadastrar} onPress={() => {}}>
-            <Text style={styles.textButtonCadastrar}>
-              Clique aqui e cadastre-se !
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      )}
     </>
   );
 }
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
     color: "#5c5e70",
   },
   icon: {
-    padding: 10,
+    padding: 3,
     color: "#9495a3",
   },
 

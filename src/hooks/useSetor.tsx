@@ -11,6 +11,7 @@ import React, {
 import { api } from "../services/api";
 import { Alert } from "react-native";
 import { useNetStatus } from "./useNetStatus";
+import { useNavigation } from "@react-navigation/native";
 
 interface SetorProviderProps {
   children?: ReactNode;
@@ -39,6 +40,7 @@ const SetorContext = createContext<SetorContextProps>({} as SetorContextProps);
 
 export function SetorProvider({ children }: SetorProviderProps) {
   const { net } = useNetStatus();
+
   const [loading, setLoading] = useState(false);
   const [setores, setSetores] = useState<Setores[]>([]);
   const [setoresOffline, setSetoresOffline] = useState<Setores[]>([]);
