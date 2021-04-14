@@ -9,6 +9,7 @@ import React, {
 } from "react";
 
 import { Alert } from "react-native";
+import Toast from "react-native-toast-message";
 import { api } from "../services/api";
 
 interface AuthLogado {
@@ -88,7 +89,13 @@ export function AuthProvider({ children, navigation }: AuthProviderProps) {
       setLoadingAuth(false);
     } catch {
       setLoadingAuth(false);
-      Alert.alert("Usuário ou senha incorretas");
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Falha ao tentar logar👋",
+        topOffset: 40,
+        bottomOffset: 40,
+      });
     }
   }
 

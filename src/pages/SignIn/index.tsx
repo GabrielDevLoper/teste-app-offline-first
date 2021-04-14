@@ -17,6 +17,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { useAuths } from "../../hooks/useAuth";
 import { ActivityIndicator } from "react-native-paper";
+import Toast from "react-native-toast-message";
 
 export function SignIn() {
   const { handleLogin, logado, loadingAuth } = useAuths();

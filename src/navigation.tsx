@@ -12,8 +12,52 @@ import { Setores } from "./pages/Setores";
 import { CadastroSetor } from "./pages/Setores/Cadastro";
 import { DrawerContent } from "./components/DrawerContent";
 import { AuthProvider } from "./hooks/useAuth";
+import Toast, { BaseToast, BaseToastProps } from "react-native-toast-message";
 
 const Drawer = createDrawerNavigator();
+
+const toastConfig = {
+  success: ({ text1, text2, ...rest }: BaseToastProps) => (
+    <BaseToast
+      {...rest}
+      style={{ borderLeftColor: "#91ff35", backgroundColor: "#76d825" }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 15,
+        fontWeight: "bold",
+        color: "white",
+      }}
+      text2Style={{
+        fontSize: 15,
+        fontWeight: "bold",
+        color: "white",
+      }}
+      text1={text1}
+      text2={text2}
+      onPress={() => Toast.hide()}
+    />
+  ),
+  error: ({ text1, text2, ...rest }: BaseToastProps) => (
+    <BaseToast
+      {...rest}
+      style={{ borderLeftColor: "#ff4569", backgroundColor: "#ff1744" }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 15,
+        fontWeight: "bold",
+        color: "white",
+      }}
+      text2Style={{
+        fontSize: 15,
+        fontWeight: "bold",
+        color: "white",
+      }}
+      text1={text1}
+      text2={text2}
+      onPress={() => Toast.hide()}
+    />
+  ),
+};
 
 export function NavigationDrawer() {
   const navigationRef = React.useRef(null);
@@ -62,6 +106,7 @@ export function NavigationDrawer() {
   return (
     <NavigationContainer ref={navigationRef}>
       <AuthRoutes />
+      <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
     </NavigationContainer>
   );
 }
