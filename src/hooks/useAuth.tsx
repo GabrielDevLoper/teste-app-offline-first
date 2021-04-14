@@ -46,14 +46,14 @@ export function AuthProvider({ children, navigation }: AuthProviderProps) {
       const token = await AsyncStorage.getItem("@token");
       const nome = await AsyncStorage.getItem("@nome");
 
+      if (nome) {
+        setNome(nome);
+      }
+
       if (token) {
         api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
         setLogado(true);
         navigation.current?.navigate("Home");
-      }
-
-      if (nome) {
-        setNome(nome);
       }
 
       setLoadingAuth(false);
@@ -79,6 +79,7 @@ export function AuthProvider({ children, navigation }: AuthProviderProps) {
 
       if (token) {
         await AsyncStorage.setItem("@token", JSON.stringify(token));
+        await AsyncStorage.setItem("@nome", name);
         setNome(name);
 
         api.defaults.headers.Authorization = `Bearer ${token}`;

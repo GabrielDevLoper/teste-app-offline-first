@@ -104,7 +104,7 @@ export function SignIn() {
           <View style={styles.containerButton}>
             <TouchableOpacity style={styles.buttonCadastrar} onPress={() => {}}>
               <Text style={styles.textButtonCadastrar}>
-                Clique aqui e cadastre-se !
+                Clique aqui e crie sua conta !
               </Text>
             </TouchableOpacity>
           </View>
