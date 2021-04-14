@@ -62,6 +62,32 @@ const toastConfig = {
       activeOpacity={20}
     />
   ),
+
+  ok: ({ text1, text2, ...rest }: BaseToastProps) => (
+    <BaseToast
+      {...rest}
+      style={{
+        borderLeftColor: "#ff4569",
+        backgroundColor: "rgb(109, 77, 224)",
+        
+      }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 15,
+        fontWeight: "bold",
+        color: "white",
+      }}
+      text2Style={{
+        fontSize: 15,
+        fontWeight: "bold",
+        color: "white",
+      }}
+      text1={text1}
+      text2={text2}
+      onPress={() => Toast.hide()}
+      activeOpacity={20}
+    />
+  ),
 };
 
 export function NavigationDrawer() {

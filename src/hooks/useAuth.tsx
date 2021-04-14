@@ -12,11 +12,17 @@ import { Alert } from "react-native";
 import Toast from "react-native-toast-message";
 import { api } from "../services/api";
 
+interface Role {
+  name: string;
+  description: string;
+}
+
 interface AuthLogado {
   token: string;
   user: {
     name: string;
     email: string;
+    roles: Role[];
   };
 }
 
@@ -26,6 +32,7 @@ interface AuthContextProps {
   logado: boolean;
   loadingAuth: boolean;
   nome: string;
+  email: string;
 }
 
 interface AuthProviderProps {
@@ -39,14 +46,19 @@ export function AuthProvider({ children, navigation }: AuthProviderProps) {
   const [logado, setLogado] = useState(false);
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     async function loadToken() {
       const token = await AsyncStorage.getItem("@token");
       const nome = await AsyncStorage.getItem("@nome");
+      const email = await AsyncStorage.getItem("@email");
+      const roles = await AsyncStorage.getItem("@roles");
 
-      if (nome) {
+      if (nome && email && roles) {
+        console.log(roles);
         setNome(nome);
+        setEmail(email);
       }
 
       if (token) {
@@ -71,7 +83,7 @@ export function AuthProvider({ children, navigation }: AuthProviderProps) {
 
       const {
         token,
-        user: { name },
+        user: { name, email: mail, roles },
       } = data;
 
       console.log(data);
@@ -79,7 +91,10 @@ export function AuthProvider({ children, navigation }: AuthProviderProps) {
       if (token) {
         await AsyncStorage.setItem("@token", JSON.stringify(token));
         await AsyncStorage.setItem("@nome", name);
+        await AsyncStorage.setItem("@email", mail);
+        await AsyncStorage.setItem("@roles", JSON.stringify(roles));
         setNome(name);
+        setEmail(mail);
 
         api.defaults.headers.Authorization = `Bearer ${token}`;
         setLogado(true);
@@ -115,6 +130,7 @@ export function AuthProvider({ children, navigation }: AuthProviderProps) {
         logado,
         loadingAuth,
         nome,
+        email,
       }}
     >
       {children}

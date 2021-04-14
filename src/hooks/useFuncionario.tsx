@@ -10,6 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { api } from "../services/api";
 import { useNetStatus } from "./useNetStatus";
+import Toast from "react-native-toast-message";
 
 interface Funcionarios {
   id?: string;
@@ -87,7 +88,6 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
     setLoading(false);
 
     if (funcionariosOnline.length == 0) {
-      console.log("oláa sincronize");
       try {
         setLoading(true);
 
@@ -98,17 +98,25 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
 
         setFuncionariosOffline([]);
         await AsyncStorage.removeItem("@funcionario_offline");
-        Alert.alert("", "Sincronização realizada com sucesso ✅", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        Toast.show({
+          type: "success",
+          text1: "Sincronizado",
+          text2: "Sucesso ao sincronizar os dados 🥳",
+          topOffset: 100,
+          bottomOffset: 40,
+        });
         setLoading(false);
 
         return;
       } catch {
         setLoading(false);
-        Alert.alert("", "Error", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: "Erro na sincronização",
+          topOffset: 100,
+          bottomOffset: 40,
+        });
       }
     }
 
@@ -143,17 +151,25 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         });
         setFuncionariosOffline([]);
         await AsyncStorage.removeItem("@funcionario_offline");
-        Alert.alert("", "Sincronização realizada com sucesso ✅", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        Toast.show({
+          type: "success",
+          text1: "Sincronizado",
+          text2: "Sucesso ao sincronizar os dados 🥳",
+          topOffset: 100,
+          bottomOffset: 40,
+        });
         setLoading(false);
       }
     } catch {
       setLoading(false);
 
-      Alert.alert("", "Erro na sincronização", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Erro na sincronização",
+        topOffset: 100,
+        bottomOffset: 40,
+      });
     }
   }
 
@@ -176,20 +192,6 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
       setLoading(true);
 
       if (!net) {
-        if (
-          nome.length === 0 ||
-          data_nascimento.length === 0 ||
-          id_setor.length === 0
-        ) {
-          Alert.alert("", "Erro ao cadastrar funcionário   ❌", [
-            { text: "OK", onPress: () => console.log("OK Pressed") },
-          ]);
-
-          setLoading(false);
-
-          return;
-        }
-
         const dataOffline = {
           ...datas,
           created_at: new Date(),
@@ -208,10 +210,13 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
         );
 
         setLoading(false);
-
-        Alert.alert("", "Sucesso ao cadastrar funcionário ✅", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Sucesso ao cadastrar o funcionário",
+          topOffset: 100,
+          bottomOffset: 40,
+        });
 
         return;
       }
@@ -220,15 +225,23 @@ export function FuncionarioProvider({ children }: FuncionarioProviderProps) {
 
       setLoading(false);
 
-      Alert.alert("", "Sucesso ao cadastrar funcionário ✅", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      Toast.show({
+        type: "success",
+        text1: "Sucesso",
+        text2: "Sucesso ao cadastrar o funcionário",
+        topOffset: 100,
+        bottomOffset: 40,
+      });
     } catch {
       setLoading(false);
 
-      Alert.alert("", "Erro ao cadastrar funcionário   ❌", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Erro ao tentar cadastrar o funcionario",
+        topOffset: 100,
+        bottomOffset: 40,
+      });
     }
   }
 

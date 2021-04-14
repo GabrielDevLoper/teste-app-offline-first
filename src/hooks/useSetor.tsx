@@ -12,6 +12,7 @@ import { api } from "../services/api";
 import { Alert } from "react-native";
 import { useNetStatus } from "./useNetStatus";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 interface SetorProviderProps {
   children?: ReactNode;
@@ -105,9 +106,13 @@ export function SetorProvider({ children }: SetorProviderProps) {
         setSetores([...setores, data]);
       });
 
-      Alert.alert("", "Setores sincronizados com sucesso ✅", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      Toast.show({
+        type: "success",
+        text1: "Sucesso",
+        text2: "Sincronização realizada com sucesso",
+        topOffset: 100,
+        bottomOffset: 40,
+      });
 
       setSetoresOffline([]);
       await AsyncStorage.removeItem("@setores_offline");
@@ -143,16 +148,25 @@ export function SetorProvider({ children }: SetorProviderProps) {
         });
         setSetoresOffline([]);
         await AsyncStorage.removeItem("@setores_offline");
-        Alert.alert("", "Sincronização realizada com sucesso ✅", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Sincronização realizada com sucesso",
+          topOffset: 100,
+          bottomOffset: 40,
+        });
+
         setLoading(false);
       } catch {
         setLoading(false);
 
-        Alert.alert("", "Erro na sincronização", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: "Erro ao tentar sincronizar",
+          topOffset: 100,
+          bottomOffset: 40,
+        });
       }
     }
   }
@@ -181,9 +195,13 @@ export function SetorProvider({ children }: SetorProviderProps) {
 
         setNome("");
 
-        Alert.alert("", "Setor cadastrado com sucesso, em modo offline ✅", [
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ]);
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Sucesso ao cadastrar o setor",
+          topOffset: 100,
+          bottomOffset: 40,
+        });
 
         setLoading(false);
 
@@ -198,17 +216,24 @@ export function SetorProvider({ children }: SetorProviderProps) {
       carregarSetoresOnline();
 
       setNome("");
-
-      Alert.alert("", "Setor cadastrado com sucesso ✅", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
-
       setLoading(false);
+
+      Toast.show({
+        type: "success",
+        text1: "Sucesso",
+        text2: "Sucesso ao cadastrar o setor",
+        topOffset: 100,
+        bottomOffset: 40,
+      });
     } catch {
       setLoading(false);
-      Alert.alert("", "Erro ao cadastrar setor   ❌", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Erro ao tentar cadastrar o setor",
+        topOffset: 100,
+        bottomOffset: 40,
+      });
     }
   }
 

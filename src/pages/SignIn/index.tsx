@@ -28,7 +28,6 @@ export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [securePassword, setSecurePassword] = useState(true);
-  const [count, setCount] = useState(0);
 
   const dark = useColorScheme();
 
@@ -52,34 +51,19 @@ export function SignIn() {
     if (email.length === 0 || password.length === 0) {
       Toast.show({
         type: "error",
-        text1: "Erro 👌",
-        text2: "Preencha todos os dados de acesso 🙄",
+        text1: "Erro",
+        text2: "Preencha todos os dados de acesso",
         topOffset: 40,
         bottomOffset: 40,
       });
-      setCount(count + 1);
+
       return;
     }
 
     handleLogin(email, password);
-    setCount(0);
+
     setEmail("");
     setPassword("");
-  }
-
-  function parabens() {
-    Toast.show({
-      type: "success",
-      text1: "Muito bem",
-      text2: "Era exatamente isso que eu estava falando 👏👏😜👏",
-      topOffset: 230,
-      bottomOffset: 40,
-    });
-    return setCount(0);
-  }
-
-  if (count > 0 && email.length > 5 && password.length > 2) {
-    parabens();
   }
 
   return (

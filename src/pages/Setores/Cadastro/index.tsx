@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Dashboard } from "../../../components/Dashboard";
 import { useSetor } from "../../../hooks/useSetor";
 import { useNetStatus } from "../../../hooks/useNetStatus";
+import Toast from "react-native-toast-message";
 
 export function CadastroSetor() {
   const {
@@ -28,9 +29,13 @@ export function CadastroSetor() {
 
   async function addSetor() {
     if (nome.length === 0) {
-      Alert.alert("", "Nome é obrigatório❌", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Preencha todos os campos",
+        topOffset: 100,
+        bottomOffset: 40,
+      });
       return;
     }
     handleSalvar();

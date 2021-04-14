@@ -16,6 +16,7 @@ import { Dashboard } from "../../../components/Dashboard";
 import { useFuncionario } from "../../../hooks/useFuncionario";
 import { useSetor } from "../../../hooks/useSetor";
 import { useNetStatus } from "../../../hooks/useNetStatus";
+import Toast from "react-native-toast-message";
 
 export function CadastroFuncionario() {
   const {
@@ -40,6 +41,22 @@ export function CadastroFuncionario() {
   }
 
   async function addFuncionario() {
+    if (
+      nome.length === 0 ||
+      data_nascimento.length === 0 ||
+      setor.length === 0
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Preencha os campos",
+        topOffset: 100,
+        bottomOffset: 40,
+      });
+
+      return;
+    }
+    
     handleSalvar(nome, data_nascimento, cpf, setor);
 
     clearFields();
