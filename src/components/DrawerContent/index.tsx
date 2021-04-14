@@ -23,7 +23,7 @@ import { useAuths } from "../../hooks/useAuth";
 export function DrawerContent(props: DrawerContentComponentProps) {
   const { nome, handleLogout } = useAuths();
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "#d8e3e7" }}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   bottomDrawerSection: {
     marginBottom: 15,
-    borderTopColor: "#f4f4f4",
+
     borderTopWidth: 1,
   },
   preference: {
@@ -152,5 +152,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 12,
     paddingHorizontal: 16,
+  },
+
+  text: {
+    color: "white",
   },
 });

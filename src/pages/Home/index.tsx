@@ -7,7 +7,7 @@ export function Home() {
   return (
     <Dashboard>
       <View>
-        {dark === "dark" ? (
+        {/* {dark === "dark" ? (
           <Image
             source={require(`../../assets/sms-branca.png`)}
             resizeMode="contain"
@@ -17,7 +17,7 @@ export function Home() {
             source={require(`../../assets/sms.png`)}
             resizeMode="contain"
           />
-        )}
+        )} */}
       </View>
     </Dashboard>
   );

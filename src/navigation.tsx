@@ -22,12 +22,16 @@ export function NavigationDrawer() {
     return (
       <AuthProvider navigation={navigationRef}>
         <Drawer.Navigator
+          drawerType="slide"
           initialRouteName="Sair"
           statusBarAnimation="fade"
+          screenOptions={{}}
           drawerContentOptions={{
             activeTintColor: "#2196F3",
+            labelStyle: {
+              color: "white",
+            },
           }}
-          drawerType="slide"
           drawerContent={(props) => <DrawerContent {...props} />}
         >
           <Drawer.Screen name="Home" component={Home} />

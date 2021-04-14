@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,21 +8,43 @@ import {
   Image,
   useColorScheme,
   Alert,
+  KeyboardAvoidingView,
+  Animated,
+  Keyboard,
+  SafeAreaView,
 } from "react-native";
+
 import { Feather } from "@expo/vector-icons";
 import { useAuths } from "../../hooks/useAuth";
-import { useNavigation } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native-paper";
 
 export function SignIn() {
-  const navigation = useNavigation();
   const { handleLogin, logado, loadingAuth } = useAuths();
+  const [offset] = useState(new Animated.ValueXY({ x: 0, y: 95 }));
+  const [opacity] = useState(new Animated.Value(0));
+  const [logo] = useState(new Animated.ValueXY({ x: 200, y: 155 }));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [securePassword, setSecurePassword] = useState(true);
 
   const dark = useColorScheme();
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.spring(offset.y, {
+        toValue: 0,
+        speed: 4,
+        useNativeDriver: true,
+        bounciness: 30,
+      }),
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [, loadingAuth]);
 
   async function handleSignIn() {
     handleLogin(email, password);
@@ -33,30 +55,40 @@ export function SignIn() {
   return (
     <>
       {loadingAuth ? (
-        <View style={styles.container}>
-          <ActivityIndicator size={100} color="#2196F3" />
-        </View>
+        <SafeAreaView style={styles.container}>
+          <ActivityIndicator size={100} color="#51c4d3" />
+        </SafeAreaView>
       ) : (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container}>
           <View style={styles.containerLogo}>
             {dark === "dark" ? (
-              <Image
-                style={styles.img}
+              <Animated.Image
+                style={{
+                  width: logo.x,
+                }}
                 source={require(`../../assets/sms-branca.png`)}
                 resizeMode="contain"
               />
             ) : (
-              <Image
-                style={styles.img}
+              <Animated.Image
+                style={{
+                  width: logo.x,
+                }}
                 source={require(`../../assets/sms.png`)}
                 resizeMode="contain"
               />
             )}
           </View>
-          <View style={styles.containerTitle}>
-            <Text style={styles.title}>Acesso ao sistema</Text>
-          </View>
-          <View style={styles.inputArea}>
+
+          <Animated.View
+            style={[
+              styles.inputArea,
+              {
+                opacity: opacity,
+                transform: [{ translateY: offset.y }],
+              },
+            ]}
+          >
             <Feather name="user" size={32} style={styles.icon} />
             <TextInput
               inlineImageLeft="search"
@@ -66,10 +98,17 @@ export function SignIn() {
               placeholder="Email"
               placeholderTextColor="#9495a3"
             />
-          </View>
-          <View style={styles.inputArea}>
+          </Animated.View>
+          <Animated.View
+            style={[
+              styles.inputArea,
+              {
+                opacity: opacity,
+                transform: [{ translateY: offset.y }],
+              },
+            ]}
+          >
             <Feather name="key" size={32} style={styles.icon} />
-
             <TextInput
               autoCompleteType="password"
               style={styles.inputStyle}
@@ -80,7 +119,6 @@ export function SignIn() {
               textContentType="password"
               placeholderTextColor="#9495a3"
             />
-
             {password.length != 0 && (
               <TouchableOpacity
                 onPress={() => setSecurePassword(!securePassword)}
@@ -92,23 +130,39 @@ export function SignIn() {
                 />
               </TouchableOpacity>
             )}
-          </View>
-          <View style={styles.containerButton}>
+          </Animated.View>
+          <Animated.View
+            style={[
+              styles.containerButton,
+              {
+                opacity: opacity,
+                transform: [{ translateY: offset.y }],
+              },
+            ]}
+          >
             <TouchableOpacity
               style={styles.buttonEntrar}
               onPress={handleSignIn}
             >
               <Text style={styles.textButtonEntrar}>Entrar</Text>
             </TouchableOpacity>
-          </View>
-          <View style={styles.containerButton}>
+          </Animated.View>
+          <Animated.View
+            style={[
+              styles.containerButton,
+              {
+                opacity: opacity,
+                transform: [{ translateY: offset.y }],
+              },
+            ]}
+          >
             <TouchableOpacity style={styles.buttonCadastrar} onPress={() => {}}>
               <Text style={styles.textButtonCadastrar}>
                 Clique aqui e crie sua conta !
               </Text>
             </TouchableOpacity>
-          </View>
-        </View>
+          </Animated.View>
+        </KeyboardAvoidingView>
       )}
     </>
   );
@@ -119,43 +173,43 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#d8e3e7",
   },
-  containerMain: {
+
+  containerInputs: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#1d192c",
   },
+
   containerLogo: {
     alignItems: "center",
     justifyContent: "center",
   },
 
   containerButton: {
-    width: 350,
     alignItems: "center",
     flexDirection: "row",
     marginTop: 20,
   },
   buttonEntrar: {
-    flex: 1,
+    width: "90%",
     padding: 15,
     margin: 10,
-    backgroundColor: "#2196F3",
+    backgroundColor: "#126e82",
     alignItems: "center",
     borderRadius: 10,
   },
 
   buttonCadastrar: {
-    flex: 1,
-    paddingTop: 30,
+    width: "80%",
     margin: 10,
     alignItems: "center",
     borderRadius: 10,
   },
+
   inputArea: {
     flexDirection: "row",
-    width: "95%",
+    width: "90%",
     borderColor: "#e5ebec",
     paddingBottom: 10,
     borderRadius: 10,
@@ -164,7 +218,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#e5ebec",
   },
   inputStyle: {
-    width: 250,
+    width: "75%",
     borderRadius: 10,
     fontFamily: "Roboto_400Regular",
     fontSize: 20,
@@ -172,33 +226,22 @@ const styles = StyleSheet.create({
   },
   icon: {
     padding: 3,
-    color: "#9495a3",
+    color: "#126e82",
   },
 
   textButtonEntrar: {
     color: "white",
     fontSize: 20,
-    fontFamily: "Roboto_400Regular",
+    fontFamily: "Roboto_500Medium",
   },
 
   textButtonCadastrar: {
-    color: "black",
+    color: "#126e82",
     fontSize: 20,
     fontFamily: "Roboto_500Medium",
   },
 
-  containerTitle: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 30,
-  },
-
-  title: {
-    fontSize: 20,
-    fontFamily: "Roboto_400Regular",
-  },
-
   img: {
-    width: 150,
+    width: 170,
   },
 });

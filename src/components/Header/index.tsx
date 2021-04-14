@@ -40,10 +40,6 @@ export function Header({ title }: HeaderProps) {
           style={styles.iconStatusNet}
         />
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={handleLogout}>
-        <Feather name="log-out" size={32} style={styles.icon} />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -57,8 +53,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     paddingBottom: 10,
-
-    backgroundColor: "#2196F3",
+    backgroundColor: "#121214",
   },
   icon: {
     padding: 8,
@@ -67,7 +62,7 @@ const styles = StyleSheet.create({
 
   iconStatusNet: {
     padding: 8,
-    backgroundColor: "#5bb2f8",
+    // backgroundColor: "#5bb2f8",
     borderRadius: 50,
   },
 });

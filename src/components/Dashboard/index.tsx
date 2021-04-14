@@ -15,8 +15,6 @@ interface DashboardProps {
 }
 
 export const Dashboard = ({ children }: DashboardProps) => {
-  const navigation = useNavigation();
-
   return (
     <>
       <Header title="Dashboard" />
@@ -31,6 +29,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
+    backgroundColor: "#121214",
   },
   statusNetworks: {
     alignItems: "center",

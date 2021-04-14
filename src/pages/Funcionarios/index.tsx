@@ -22,16 +22,16 @@ export function Funcionarios() {
 
 const styles = StyleSheet.create({
   btnCadastrarFuncionario: {
-    width: 300,
     padding: 20,
-    backgroundColor: "#2196F3",
+    backgroundColor: "#126e82",
     borderRadius: 10,
     alignItems: "center",
+    justifyContent: "center",
   },
 
   title: {
     color: "white",
     fontFamily: "Roboto_500Medium",
-    fontSize: 20,
+    fontSize: 17,
   },
 });

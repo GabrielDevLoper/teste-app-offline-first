@@ -11,8 +11,6 @@ import React, {
 import { Alert } from "react-native";
 import { api } from "../services/api";
 
-import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types";
-
 interface AuthLogado {
   token: string;
   user: {

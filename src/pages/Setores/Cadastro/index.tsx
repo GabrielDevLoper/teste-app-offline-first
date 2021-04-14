@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  View,
 } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -38,16 +39,19 @@ export function CadastroSetor() {
   return (
     <Dashboard>
       {loading ? (
-        <ActivityIndicator size={100} color="#2196F3" />
+        <ActivityIndicator size={100} color="#51c4d3" />
       ) : (
         <>
-          <Text style={styles.title}>Cadastro de setor</Text>
-          <SafeAreaView>
+          <SafeAreaView style={styles.container}>
+            <View style={styles.containerTitle}>
+              <Text style={styles.title}>Cadastro de setor</Text>
+            </View>
             <TextInput
               style={styles.input}
               onChangeText={setNome}
               value={nome}
               placeholder="Nome"
+              placeholderTextColor="#56565f"
             />
 
             <TouchableOpacity onPress={addSetor} style={styles.buttonSalvar}>
@@ -69,23 +73,37 @@ export function CadastroSetor() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#202024",
+    padding: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+
+  containerTitle: {
+    marginBottom: 20,
+  },
   buttonSalvar: {
     width: 300,
     padding: 2,
     marginTop: 50,
-    backgroundColor: "#2196F3",
+    backgroundColor: "#126e82",
     borderRadius: 10,
     alignItems: "center",
+    elevation: 10,
   },
 
   input: {
     height: 50,
     width: 300,
-    backgroundColor: "#e5ebec",
+    backgroundColor: "#121214",
+    fontFamily: "Roboto_500Medium",
     borderRadius: 10,
     marginBottom: 8,
     paddingHorizontal: 24,
     fontSize: 16,
+    color: "white",
   },
 
   picker: {
@@ -98,12 +116,14 @@ const styles = StyleSheet.create({
   title: {
     margin: 20,
     fontSize: 20,
-    color: "black",
+    color: "white",
+    fontFamily: "Roboto_500Medium",
   },
 
   titleButtonText: {
     margin: 20,
     fontSize: 20,
     color: "white",
+    fontFamily: "Roboto_500Medium",
   },
 });
