@@ -35,12 +35,16 @@ const toastConfig = {
       text1={text1}
       text2={text2}
       onPress={() => Toast.hide()}
+      activeOpacity={20}
     />
   ),
   error: ({ text1, text2, ...rest }: BaseToastProps) => (
     <BaseToast
       {...rest}
-      style={{ borderLeftColor: "#ff4569", backgroundColor: "#ff1744" }}
+      style={{
+        borderLeftColor: "#ff4569",
+        backgroundColor: "#ff1744",
+      }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
         fontSize: 15,
@@ -55,6 +59,7 @@ const toastConfig = {
       text1={text1}
       text2={text2}
       onPress={() => Toast.hide()}
+      activeOpacity={20}
     />
   ),
 };
