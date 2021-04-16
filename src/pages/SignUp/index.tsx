@@ -12,25 +12,28 @@ import {
   Animated,
   Keyboard,
   SafeAreaView,
+  Platform,
 } from "react-native";
 
 import { Feather } from "@expo/vector-icons";
 import { useAuths } from "../../hooks/useAuth";
-import { ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator, Avatar, Button } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
 
-export function SignIn() {
+export function SignUp() {
   const { handleLogin, logado, loadingAuth } = useAuths();
   const navigation = useNavigation();
+
   const [offset] = useState(new Animated.ValueXY({ x: 0, y: 95 }));
   const [opacity] = useState(new Animated.Value(0));
   const [logo] = useState(new Animated.ValueXY({ x: 200, y: 155 }));
-
+  const [image, setImage] = useState("");
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [securePassword, setSecurePassword] = useState(true);
-
   const dark = useColorScheme();
 
   useEffect(() => {
@@ -47,7 +50,57 @@ export function SignIn() {
         useNativeDriver: true,
       }),
     ]).start();
+
+    (async () => {
+      if (Platform.OS !== "web") {
+        const {
+          status,
+        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    })();
+
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    })();
   }, [, loadingAuth]);
+
+  const openCamera = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
+  const openGaleria = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   async function handleSignIn() {
     if (email.length === 0 || password.length === 0) {
@@ -77,24 +130,46 @@ export function SignIn() {
       ) : (
         <KeyboardAvoidingView style={styles.container}>
           <View style={styles.containerLogo}>
-            {dark === "dark" ? (
-              <Animated.Image
-                style={{
-                  width: logo.x,
+            <TouchableOpacity onPress={openCamera}>
+              <Avatar.Image
+                source={{
+                  uri: image
+                    ? image
+                    : "https://previews.123rf.com/images/ankudi/ankudi1711/ankudi171100197/89688256-photo-or-camera-icon-vector-photography.jpg",
                 }}
-                source={require(`../../assets/sms-branca.png`)}
-                resizeMode="contain"
+                size={200}
               />
-            ) : (
-              <Animated.Image
-                style={{
-                  width: logo.x,
-                }}
-                source={require(`../../assets/sms.png`)}
-                resizeMode="contain"
-              />
-            )}
+            </TouchableOpacity>
+
+            <Button
+              onPress={openGaleria}
+              mode="outlined"
+              color="#126e82"
+              style={styles.openGaleria}
+            >
+              <Text style={styles.textOpenGaleria}>Escolher da galera</Text>
+            </Button>
           </View>
+
+          <Animated.View
+            style={[
+              styles.inputArea,
+              {
+                opacity: opacity,
+                transform: [{ translateY: offset.y }],
+              },
+            ]}
+          >
+            <Feather name="user" size={32} style={styles.icon} />
+            <TextInput
+              inlineImageLeft="search"
+              style={styles.inputStyle}
+              onChangeText={setNome}
+              value={nome}
+              placeholder="Nome"
+              placeholderTextColor="#9495a3"
+            />
+          </Animated.View>
 
           <Animated.View
             style={[
@@ -160,7 +235,7 @@ export function SignIn() {
               style={styles.buttonEntrar}
               onPress={handleSignIn}
             >
-              <Text style={styles.textButtonEntrar}>Entrar</Text>
+              <Text style={styles.textButtonEntrar}>Cadastrar</Text>
             </TouchableOpacity>
           </Animated.View>
           <Animated.View
@@ -175,13 +250,10 @@ export function SignIn() {
             <TouchableOpacity
               style={styles.buttonCadastrar}
               onPress={() => {
-                navigation.navigate("Criar Conta");
+                navigation.navigate("Sair");
               }}
             >
-              <Text style={styles.textButtonCadastrar}>
-                {" "}
-                Clique aqui e crie sua conta !
-              </Text>
+              <Text style={styles.textButtonCadastrar}>Voltar</Text>
             </TouchableOpacity>
           </Animated.View>
         </KeyboardAvoidingView>
@@ -206,6 +278,7 @@ const styles = StyleSheet.create({
   containerLogo: {
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 40,
   },
 
   containerButton: {
@@ -261,6 +334,16 @@ const styles = StyleSheet.create({
     color: "#126e82",
     fontSize: 20,
     fontFamily: "Roboto_500Medium",
+  },
+
+  openGaleria: {
+    marginTop: 40,
+    borderBottomColor: "#0fa9c4",
+  },
+
+  textOpenGaleria: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 20,
   },
 
   img: {

@@ -8,6 +8,8 @@ import { Funcionarios } from "./pages/Funcionarios";
 import { CadastroFuncionario } from "./pages/Funcionarios/Cadastro";
 import { Home } from "./pages/Home";
 import { SignIn } from "./pages/SignIn";
+import { SignUp } from "./pages/SignUp";
+
 import { Setores } from "./pages/Setores";
 import { CadastroSetor } from "./pages/Setores/Cadastro";
 import { DrawerContent } from "./components/DrawerContent";
@@ -69,7 +71,6 @@ const toastConfig = {
       style={{
         borderLeftColor: "#ff4569",
         backgroundColor: "rgb(109, 77, 224)",
-        
       }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
@@ -125,6 +126,14 @@ export function NavigationDrawer() {
           <Drawer.Screen
             name="Sair"
             component={SignIn}
+            options={{
+              swipeEnabled: false,
+            }}
+          />
+
+          <Drawer.Screen
+            name="Criar Conta"
+            component={SignUp}
             options={{
               swipeEnabled: false,
             }}
