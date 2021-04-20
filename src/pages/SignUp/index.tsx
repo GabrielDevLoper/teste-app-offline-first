@@ -66,7 +66,7 @@ export function SignUp() {
       if (Platform.OS !== "web") {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
+          alert("Descula, nós precisamos que você aceite as permissões");
         }
       }
     })();
@@ -103,22 +103,14 @@ export function SignUp() {
   };
 
   async function handleSignIn() {
-    if (email.length === 0 || password.length === 0) {
-      Toast.show({
-        type: "error",
-        text1: "Erro",
-        text2: "Preencha todos os dados de acesso",
-        topOffset: 40,
-        bottomOffset: 40,
-      });
+    const data = new FormData();
 
-      return;
-    }
+    data.append("nome", nome);
+    data.append("email", email);
+    data.append("password", password);
+    data.append("file", image);
 
-    handleLogin(email, password);
-
-    setEmail("");
-    setPassword("");
+    console.log(data);
   }
 
   return (
