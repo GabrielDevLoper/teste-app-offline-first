@@ -118,6 +118,8 @@ export function AuthProvider({ children, navigation }: AuthProviderProps) {
     setLogado(false);
     await AsyncStorage.removeItem("@token");
     await AsyncStorage.removeItem("@nome");
+    await AsyncStorage.removeItem("@email");
+    await AsyncStorage.removeItem("@roles");
     api.defaults.headers.Authorization = undefined;
     navigation.current?.navigate("Sair");
   }
